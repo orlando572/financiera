@@ -25,10 +25,15 @@ import com.app.financiera.service.RolUsuarioService;
 import com.app.financiera.service.AfpService;
 import com.app.financiera.util.AppSettings;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/api/usuario")
 @CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
 public class UsuarioController {
+
+    private static final Logger logger = LoggerFactory.getLogger(UsuarioController.class);
 
     @Autowired
     private UsuarioService usuarioService;
@@ -53,29 +58,34 @@ public class UsuarioController {
         return afpService.listarAfps();
     }
 
-  // Registrar Usuario
+    // Registrar Usuario
     @PostMapping("/registrarUsuario")
     @ResponseBody
     public ResponseEntity<?> registra(@RequestBody Usuario obj) {
         HashMap<String, Object> salida = new HashMap<>();
         try {
-            // Validar que no exista el DNI
+            logger.info("Intentando registrar usuario con DNI: {}", obj.getDni());
+
             Usuario existente = usuarioService.buscarPorDni(obj.getDni());
             if (existente != null) {
+                logger.warn("Intento de registro con DNI duplicado: {}", obj.getDni());
                 salida.put("mensaje", "Ya existe un usuario con ese DNI");
                 return ResponseEntity.status(400).body(salida);
             }
 
             Usuario objSalida = usuarioService.registraUsuario(obj);
             if (objSalida == null) {
+                logger.error("Error al registrar usuario con DNI: {}", obj.getDni());
                 salida.put("mensaje", "Ocurrió un error al registrar");
             } else {
+                logger.info("Usuario registrado exitosamente: {} {} (ID: {})",
+                        objSalida.getNombre(), objSalida.getApellido(), objSalida.getIdUsuario());
                 salida.put("mensaje", "Se registró exitosamente el usuario " +
                         "'" + objSalida.getNombre() + " " + objSalida.getApellido() + "'" +
                         " ID asignado: " + objSalida.getIdUsuario());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Excepción al registrar usuario con DNI: {} - {}", obj.getDni(), e.getMessage(), e);
             salida.put("mensaje", AppSettings.MENSAJE_REG_ERROR);
         }
         return ResponseEntity.ok(salida);
@@ -116,23 +126,27 @@ public class UsuarioController {
             String dni = credentials.get("dni");
             String claveSol = credentials.get("claveSol");
 
+            logger.info("Intento de login con DNI: {}", dni);
+
             Usuario usuario = usuarioService.buscarPorDni(dni);
 
             if (usuario == null) {
+                logger.warn("Login fallido: usuario no encontrado (DNI: {})", dni);
                 salida.put("mensaje", "Usuario no encontrado");
                 return ResponseEntity.status(404).body(salida);
             }
 
             if (!usuario.getClaveSol().equals(claveSol)) {
+                logger.warn("Login fallido: clave incorrecta para usuario con DNI: {}", dni);
                 salida.put("mensaje", "Clave incorrecta");
                 return ResponseEntity.status(401).body(salida);
             }
 
-            // Login exitoso
+            logger.info("Login exitoso para usuario: {} {}", usuario.getNombre(), usuario.getApellido());
             return ResponseEntity.ok(usuario);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error en login (DNI: {}): {}", credentials.get("dni"), e.getMessage(), e);
             salida.put("mensaje", "Error en el servidor");
             return ResponseEntity.status(500).body(salida);
         }
