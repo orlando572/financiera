@@ -1,6 +1,8 @@
 package com.app.financiera.controller;
 
 import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,8 @@ import com.app.financiera.util.AppSettings;
 @CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
 public class FinancieroController {
 
+    private static final Logger logger = LoggerFactory.getLogger(FinancieroController.class);
+
     @Autowired
     private AportePensionService aportePensionService;
 
@@ -27,8 +31,10 @@ public class FinancieroController {
     private TipoFondoRepository tipoFondoRepository;
 
     // RESUMEN FINANCIERO
+    // RESUMEN FINANCIERO
     @GetMapping("/resumen/{idUsuario}")
     public ResponseEntity<?> obtenerResumenFinanciero(@PathVariable int idUsuario) {
+        logger.info("Solicitud de resumen financiero para usuario ID: {}", idUsuario);
         try {
             HashMap<String, Object> resumen = new HashMap<>();
 
@@ -54,9 +60,10 @@ public class FinancieroController {
             resumen.put("aportesAFP12m", montoAFP);
             resumen.put("mensaje", "Resumen obtenido exitosamente");
 
+            logger.info("Resumen financiero generado correctamente para usuario ID: {}", idUsuario);
             return ResponseEntity.ok(resumen);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error al obtener resumen financiero para usuario ID {}: {}", idUsuario, e.getMessage(), e);
             HashMap<String, Object> error = new HashMap<>();
             error.put("mensaje", "Error al obtener resumen financiero");
             error.put("error", e.getMessage());
@@ -67,11 +74,13 @@ public class FinancieroController {
     // APORTES
     @GetMapping("/aportes/{idUsuario}")
     public ResponseEntity<?> obtenerAportesUsuario(@PathVariable int idUsuario) {
+        logger.info("Solicitud de aportes para usuario ID: {}", idUsuario);
         try {
             List<AportePension> aportes = aportePensionService.obtenerAportesUsuario(idUsuario);
+            logger.info("Se obtuvieron {} aportes para usuario ID {}", aportes.size(), idUsuario);
             return ResponseEntity.ok(aportes);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error al obtener aportes para usuario ID {}: {}", idUsuario, e.getMessage(), e);
             return ResponseEntity.status(500).body("Error al obtener aportes");
         }
     }
@@ -118,11 +127,13 @@ public class FinancieroController {
     // SALDOS
     @GetMapping("/saldos/{idUsuario}")
     public ResponseEntity<?> obtenerSaldosUsuario(@PathVariable int idUsuario) {
+        logger.info("Solicitud de saldos para usuario ID: {}", idUsuario);
         try {
             List<SaldoPension> saldos = saldoPensionService.obtenerSaldosUsuario(idUsuario);
+            logger.info("Se obtuvieron {} saldos para usuario ID {}", saldos.size(), idUsuario);
             return ResponseEntity.ok(saldos);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error al obtener saldos para usuario ID {}: {}", idUsuario, e.getMessage(), e);
             return ResponseEntity.status(500).body("Error al obtener saldos");
         }
     }
@@ -143,6 +154,7 @@ public class FinancieroController {
     // ESTADÍSTICAS
     @GetMapping("/estadisticas/{idUsuario}")
     public ResponseEntity<?> obtenerEstadisticas(@PathVariable int idUsuario) {
+        logger.info("Solicitud de estadísticas para usuario ID: {}", idUsuario);
         try {
             HashMap<String, Object> stats = new HashMap<>();
             int yearActual = Calendar.getInstance().get(Calendar.YEAR);
@@ -159,11 +171,12 @@ public class FinancieroController {
 
             stats.put("aportesPorYear", aportesPorYear);
             stats.put("saldoTotal", saldoPensionService.obtenerSaldoTotalUsuario(idUsuario));
-            stats.put("rentabilidadPromedio", 5.2); // Valor ejemplo
+            stats.put("rentabilidadPromedio", 5.2);
 
+            logger.info("Estadísticas generadas correctamente para usuario ID {}", idUsuario);
             return ResponseEntity.ok(stats);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error al obtener estadísticas para usuario ID {}: {}", idUsuario, e.getMessage(), e);
             return ResponseEntity.status(500).body("Error al obtener estadísticas");
         }
     }
@@ -194,6 +207,7 @@ public class FinancieroController {
     // ANÁLISIS COMPARATIVO
     @GetMapping("/comparativo/{idUsuario}")
     public ResponseEntity<?> obtenerComparativo(@PathVariable int idUsuario) {
+        logger.info("Solicitud de comparativo financiero para usuario ID: {}", idUsuario);
         try {
             HashMap<String, Object> comparativo = new HashMap<>();
 
@@ -211,9 +225,10 @@ public class FinancieroController {
             comparativo.put("porcentajeONP", montoONP + montoAFP > 0 ? (montoONP / (montoONP + montoAFP)) * 100 : 0);
             comparativo.put("porcentajeAFP", montoONP + montoAFP > 0 ? (montoAFP / (montoONP + montoAFP)) * 100 : 0);
 
+            logger.info("Comparativo generado correctamente para usuario ID {}", idUsuario);
             return ResponseEntity.ok(comparativo);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error al obtener comparativo financiero para usuario ID {}: {}", idUsuario, e.getMessage(), e);
             return ResponseEntity.status(500).body("Error al obtener comparativo");
         }
     }
