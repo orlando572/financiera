@@ -31,7 +31,6 @@ public class FinancieroController {
     private TipoFondoRepository tipoFondoRepository;
 
     // RESUMEN FINANCIERO
-    // RESUMEN FINANCIERO
     @GetMapping("/resumen/{idUsuario}")
     public ResponseEntity<?> obtenerResumenFinanciero(@PathVariable int idUsuario) {
         logger.info("Solicitud de resumen financiero para usuario ID: {}", idUsuario);
