@@ -7,10 +7,15 @@ public interface UsuarioService {
 
     Usuario buscarPorDni(String dni);
 
-    // CRUD
+    // CRUD básico
     Usuario registraUsuario(Usuario obj);
     Usuario actualizaUsuario(Usuario obj);
     void eliminaUsuario(int id);
     List<Usuario> listaTodos();
     List<Usuario> buscarUsuarioPorId(int id);
+
+    // Búsquedas adicionales para admin
+    List<Usuario> buscarPorNombreODni(String busqueda);
+    List<Usuario> buscarPorEstado(String estado);
+    List<Usuario> buscarPorRol(int idRol);
 }
