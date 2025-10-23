@@ -20,7 +20,7 @@ public class AdminAfpController {
 
     @Autowired
     private AfpService afpService;
-    // nnnnnn
+    // nnnnnn x
     // Listar todas las AFPs
     @GetMapping
     public ResponseEntity<?> listarAfps(
