@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -39,9 +43,9 @@ public class Afp {
     @Column(name = "rentabilidad_promedio")
     private Double rentabilidadPromedio;
 
-    // Guardamos el JSON como texto
-    @Column(name = "fondos_disponibles", columnDefinition = "JSON")
-    private String fondosDisponibles;
+    @Column(name = "fondos_disponibles", columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
+    private List<String> fondosDisponibles;
 
     private String estado;
 }
