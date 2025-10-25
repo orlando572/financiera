@@ -36,8 +36,10 @@ public class Usuario {
     private Date fechaNacimiento;
 
     private String genero;
+
     @Column(name = "estado_civil")
     private String estadoCivil;
+
     private String correo;
     private String telefono;
     private String direccion;
@@ -45,10 +47,13 @@ public class Usuario {
     private String provincia;
     private String departamento;
     private String contrasena;
+
     @Column(name = "clave_sol")
     private String claveSol;
+
     @Column(name = "centro_trabajo")
     private String centroTrabajo;
+
     @Column(name = "salario_actual")
     private Double salarioActual;
 
@@ -60,6 +65,7 @@ public class Usuario {
 
     @Column(name = "tipo_contrato")
     private String tipoContrato;
+
     private String cuspp;
 
     // Relación con AFP (opcional)
@@ -89,4 +95,8 @@ public class Usuario {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Lima")
     @Column(name = "ultimo_acceso")
     private Date ultimoAcceso;
+
+    // NUEVO CAMPO: Foto de perfil
+    @Column(name = "foto_perfil", columnDefinition = "TEXT")
+    private String fotoPerfil;
 }
