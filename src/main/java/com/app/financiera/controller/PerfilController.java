@@ -23,9 +23,6 @@ public class PerfilController {
     @Autowired
     private PerfilService perfilService;
 
-    /**
-     * Obtener perfil del usuario
-     */
     @GetMapping("/{idUsuario}")
     public ResponseEntity<?> obtenerPerfil(@PathVariable int idUsuario) {
         logger.info("Solicitud de perfil para usuario ID: {}", idUsuario);
@@ -41,9 +38,6 @@ public class PerfilController {
         }
     }
 
-    /**
-     * Actualizar perfil del usuario
-     */
     @PutMapping("/{idUsuario}")
     public ResponseEntity<?> actualizarPerfil(
             @PathVariable int idUsuario,
@@ -74,9 +68,6 @@ public class PerfilController {
         }
     }
 
-    /**
-     * Actualizar solo la foto de perfil
-     */
     @PatchMapping("/{idUsuario}/foto")
     public ResponseEntity<?> actualizarFotoPerfil(
             @PathVariable int idUsuario,
@@ -109,9 +100,6 @@ public class PerfilController {
         }
     }
 
-    /**
-     * Validar DNI único
-     */
     @GetMapping("/validar-dni")
     public ResponseEntity<?> validarDni(
             @RequestParam String dni,
@@ -129,9 +117,6 @@ public class PerfilController {
         }
     }
 
-    /**
-     * Validar correo único
-     */
     @GetMapping("/validar-correo")
     public ResponseEntity<?> validarCorreo(
             @RequestParam String correo,

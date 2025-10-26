@@ -18,13 +18,7 @@ import com.app.financiera.repository.SaldoPensionRepository;
 import com.app.financiera.repository.UsuarioRepository;
 import com.app.financiera.repository.InstitucionRepository;
 
-/**
- * Implementación del servicio de gestión de aportes de pensión
- * Actualiza automáticamente los saldos cuando se modifican aportes
- *
- * @author Sistema Financiero
- * @version 1.0
- */
+
 @Service
 public class AportePensionServiceImpl implements AportePensionService {
 
@@ -125,15 +119,6 @@ public class AportePensionServiceImpl implements AportePensionService {
         return aportePensionRepository.findAll();
     }
 
-    // ========================================
-    // MÉTODOS PRIVADOS - SINCRONIZACIÓN Y ACTUALIZACIÓN
-    // ========================================
-
-    /**
-     * Sincroniza la institución del aporte con el perfil actual del usuario
-     * Si el usuario tiene AFP configurada, usa esa AFP
-     * Si el usuario tiene tipoRegimen="ONP", busca la institución ONP
-     */
     private void sincronizarInstitucionConUsuario(AportePension aporte) {
         try {
             int idUsuario = aporte.getUsuario().getIdUsuario();
@@ -207,10 +192,6 @@ public class AportePensionServiceImpl implements AportePensionService {
         }
     }
 
-    /**
-     * Actualiza o crea el saldo de pensión del usuario basado en sus aportes
-     * Calcula el saldo total sumando todos los aportes del usuario
-     */
     private void actualizarSaldoUsuario(int idUsuario) {
         try {
             logger.info("Actualizando saldo para usuario: {}", idUsuario);
@@ -263,9 +244,6 @@ public class AportePensionServiceImpl implements AportePensionService {
             if (aportes.get(0).getTipoFondo() != null) {
                 saldo.setTipoFondo(aportes.get(0).getTipoFondo());
             }
-
-            // Nota: AportePension no tiene relación directa con AFP
-            // La AFP se obtiene del usuario o se puede dejar null
 
             // Guardar saldo
             saldoPensionRepository.save(saldo);

@@ -152,9 +152,6 @@ public class PerfilServiceImpl implements PerfilService {
         return usuarioExistente == null || usuarioExistente.getIdUsuario() == idUsuarioActual;
     }
 
-    /**
-     * Método privado para convertir Usuario a DTO
-     */
     private PerfilUsuarioDTO convertirADTO(Usuario usuario) {
         PerfilUsuarioDTO dto = new PerfilUsuarioDTO();
 

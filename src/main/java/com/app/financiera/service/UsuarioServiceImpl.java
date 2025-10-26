@@ -10,13 +10,6 @@ import com.app.financiera.entity.Usuario;
 import com.app.financiera.repository.RolUsuarioRepository;
 import com.app.financiera.repository.UsuarioRepository;
 
-/**
- * Implementación del servicio de gestión de usuarios
- * Contiene la lógica de negocio para operaciones CRUD y validaciones
- *
- * @author Sistema Financiero
- * @version 1.0
- */
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
 
@@ -25,10 +18,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     private RolUsuarioRepository rolUsuarioRepository;
-
-    // ========================================
-    // MÉTODOS DE BÚSQUEDA
-    // ========================================
 
     @Override
     public Usuario buscarPorDni(String dni) {
@@ -60,18 +49,6 @@ public class UsuarioServiceImpl implements UsuarioService {
         return repository.findByRolId(idRol);
     }
 
-    // ========================================
-    // MÉTODOS DE CREACIÓN Y ACTUALIZACIÓN
-    // ========================================
-
-    /**
-     * Registra un nuevo usuario en el sistema
-     * Valida que el DNI no esté duplicado y asigna rol por defecto si no tiene
-     *
-     * @param obj Usuario a registrar
-     * @return Usuario registrado con ID asignado
-     * @throws RuntimeException si el DNI ya existe o el rol no se encuentra
-     */
     @Override
     public Usuario registraUsuario(Usuario obj) {
         // Validar que el DNI no esté duplicado
@@ -95,25 +72,11 @@ public class UsuarioServiceImpl implements UsuarioService {
         return repository.save(obj);
     }
 
-    // ========================================
-    // MÉTODOS DE ELIMINACIÓN
-    // ========================================
-
     @Override
     public void eliminaUsuario(int id) {
         repository.deleteById(id);
     }
 
-    // ========================================
-    // MÉTODOS DE ESTADÍSTICAS
-    // ========================================
-
-    /**
-     * Calcula estadísticas generales de usuarios
-     * Cuenta total, activos, inactivos y bloqueados
-     *
-     * @return Mapa con las estadísticas calculadas
-     */
     @Override
     public java.util.HashMap<String, Object> obtenerEstadisticas() {
         java.util.HashMap<String, Object> stats = new java.util.HashMap<>();

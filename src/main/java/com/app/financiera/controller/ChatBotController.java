@@ -19,9 +19,6 @@ public class ChatBotController {
     @Autowired
     private ChatBotService chatBotService;
 
-    /**
-     * Procesa un mensaje del usuario y retorna respuesta del chatbot
-     */
     @PostMapping("/mensaje")
     public ResponseEntity<?> procesarMensaje(@RequestBody HashMap<String, Object> request) {
         HashMap<String, Object> respuesta = new HashMap<>();
@@ -53,9 +50,6 @@ public class ChatBotController {
         }
     }
 
-    /**
-     * Solicitar contacto con asesor humano
-     */
     @PostMapping("/solicitar-asesor")
     public ResponseEntity<?> solicitarAsesor(@RequestBody HashMap<String, Object> request) {
         HashMap<String, Object> respuesta = new HashMap<>();

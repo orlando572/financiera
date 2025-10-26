@@ -8,12 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.app.financiera.entity.Asesor;
 
-/**
- * Repositorio para gestión de asesores financieros
- *
- * @author Sistema Financiero
- * @version 1.0
- */
 public interface AsesorRepository extends JpaRepository<Asesor, Integer> {
 
     // Buscar por código de asesor

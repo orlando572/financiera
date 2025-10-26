@@ -9,22 +9,11 @@ import org.springframework.stereotype.Service;
 import com.app.financiera.entity.Afp;
 import com.app.financiera.repository.AfpRepository;
 
-/**
- * Implementación del servicio de gestión de AFPs
- * Contiene la lógica de negocio para operaciones CRUD y estadísticas
- *
- * @author Sistema Financiero
- * @version 1.0
- */
 @Service
 public class AfpServiceImpl implements AfpService {
 
     @Autowired
     private AfpRepository afpRepository;
-
-    // ========================================
-    // MÉTODOS DE CONSULTA
-    // ========================================
 
     @Override
     public List<Afp> listarAfps() {
@@ -57,10 +46,6 @@ public class AfpServiceImpl implements AfpService {
         return afpRepository.findByEstado(estado);
     }
 
-    // ========================================
-    // MÉTODOS DE CREACIÓN Y ACTUALIZACIÓN
-    // ========================================
-
     @Override
     public Afp guardarAfp(Afp afp) {
         return afpRepository.save(afp);
@@ -71,25 +56,11 @@ public class AfpServiceImpl implements AfpService {
         return afpRepository.save(afp);
     }
 
-    // ========================================
-    // MÉTODOS DE ELIMINACIÓN
-    // ========================================
-
     @Override
     public void eliminarAfp(int id) {
         afpRepository.deleteById(id);
     }
 
-    // ========================================
-    // MÉTODOS DE ESTADÍSTICAS
-    // ========================================
-
-    /**
-     * Calcula estadísticas generales de AFPs
-     * Cuenta total, activas e inactivas
-     *
-     * @return Mapa con las estadísticas calculadas
-     */
     @Override
     public java.util.HashMap<String, Object> obtenerEstadisticas() {
         java.util.HashMap<String, Object> stats = new java.util.HashMap<>();

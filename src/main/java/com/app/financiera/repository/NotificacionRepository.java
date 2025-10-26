@@ -8,12 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.app.financiera.entity.Notificacion;
 
-/**
- * Repositorio para gestión de notificaciones
- *
- * @author Sistema Financiero
- * @version 1.0
- */
 public interface NotificacionRepository extends JpaRepository<Notificacion, Integer> {
 
     // Buscar notificaciones por usuario

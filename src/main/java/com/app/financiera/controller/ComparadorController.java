@@ -150,7 +150,6 @@ public class ComparadorController {
         }
     }
 
-    // Obtener resumen detallado de un plan
     @GetMapping("/plan/{idSeguro}")
     public ResponseEntity<?> obtenerResumenPlan(@PathVariable int idSeguro) {
         logger.info("Solicitud de resumen de plan: {}", idSeguro);
@@ -168,7 +167,6 @@ public class ComparadorController {
         }
     }
 
-    // Obtener estadísticas por categoría
     @GetMapping("/estadisticas/{categoria}")
     public ResponseEntity<?> obtenerEstadisticas(@PathVariable String categoria) {
         logger.info("Solicitud de estadísticas para categoría: {}", categoria);
@@ -181,7 +179,6 @@ public class ComparadorController {
         }
     }
 
-    // Health check del comparador
     @GetMapping("/health")
     public ResponseEntity<?> healthCheck() {
         HashMap<String, Object> health = new HashMap<>();

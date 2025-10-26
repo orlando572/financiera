@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.app.financiera.entity.Usuario;
-import com.app.financiera.entity.SaldoPension;
 import com.app.financiera.entity.AportePension;
 import com.app.financiera.entity.Seguro;
 import com.app.financiera.repository.UsuarioRepository;
@@ -198,9 +197,6 @@ public class ChatBotServiceImpl implements ChatBotService {
         }
     }
 
-    /**
-     * Respuestas básicas si Gemini no está disponible
-     */
     private String generarRespuestaBasica(String mensaje, String contextoUsuario) {
         String mensajeLower = mensaje.toLowerCase();
 

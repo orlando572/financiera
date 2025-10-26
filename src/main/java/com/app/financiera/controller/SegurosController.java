@@ -24,9 +24,6 @@ public class SegurosController {
     @Autowired
     private SegurosService segurosService;
 
-    // ============================================
-    // RESUMEN ADMINISTRATIVO
-    // ============================================
     @GetMapping("/resumen/{idUsuario}")
     public ResponseEntity<?> obtenerResumen(@PathVariable int idUsuario) {
         logger.info("Solicitud de resumen de seguros para usuario: {}", idUsuario);
@@ -42,11 +39,6 @@ public class SegurosController {
         }
     }
 
-    // ============================================
-    // GESTIÓN DE PÓLIZAS
-    // ============================================
-
-    // Obtener todos los seguros del usuario
     @GetMapping("/polizas/{idUsuario}")
     public ResponseEntity<?> obtenerPolizas(@PathVariable int idUsuario) {
         logger.info("Solicitud de pólizas para usuario: {}", idUsuario);
@@ -150,10 +142,6 @@ public class SegurosController {
         }
     }
 
-    // ============================================
-    // GESTIÓN DE BENEFICIARIOS
-    // ============================================
-
     // Obtener beneficiarios de un seguro
     @GetMapping("/beneficiarios/{idSeguro}")
     public ResponseEntity<?> obtenerBeneficiarios(@PathVariable int idSeguro) {
@@ -216,10 +204,6 @@ public class SegurosController {
         }
     }
 
-    // ============================================
-    // GESTIÓN DE PAGOS
-    // ============================================
-
     // Obtener pagos de un seguro
     @GetMapping("/pagos/{idSeguro}")
     public ResponseEntity<?> obtenerPagos(@PathVariable int idSeguro) {
@@ -265,10 +249,6 @@ public class SegurosController {
             return ResponseEntity.status(500).body("Error al registrar pago");
         }
     }
-
-    // ============================================
-    // GESTIÓN DE TRÁMITES Y RECLAMOS
-    // ============================================
 
     // Obtener trámites del usuario
     @GetMapping("/tramites/{idUsuario}")
@@ -343,10 +323,6 @@ public class SegurosController {
             return ResponseEntity.status(500).body("Error al eliminar trámite");
         }
     }
-
-    // ============================================
-    // ESTADÍSTICAS
-    // ============================================
 
     @GetMapping("/estadisticas/{idUsuario}")
     public ResponseEntity<?> obtenerEstadisticas(@PathVariable int idUsuario) {

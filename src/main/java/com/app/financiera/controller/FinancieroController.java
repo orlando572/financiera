@@ -30,7 +30,7 @@ public class FinancieroController {
     @Autowired
     private TipoFondoRepository tipoFondoRepository;
 
-    // RESUMEN FINANCIERO
+    // Resumen financiero
     @GetMapping("/resumen/{idUsuario}")
     public ResponseEntity<?> obtenerResumenFinanciero(@PathVariable int idUsuario) {
         logger.info("Solicitud de resumen financiero para usuario ID: {}", idUsuario);
@@ -70,7 +70,7 @@ public class FinancieroController {
         }
     }
 
-    // APORTES
+    // Aportes
     @GetMapping("/aportes/{idUsuario}")
     public ResponseEntity<?> obtenerAportesUsuario(@PathVariable int idUsuario) {
         logger.info("Solicitud de aportes para usuario ID: {}", idUsuario);
@@ -123,7 +123,7 @@ public class FinancieroController {
         }
     }
 
-    // SALDOS
+    // Saldos
     @GetMapping("/saldos/{idUsuario}")
     public ResponseEntity<?> obtenerSaldosUsuario(@PathVariable int idUsuario) {
         logger.info("Solicitud de saldos para usuario ID: {}", idUsuario);
@@ -150,7 +150,7 @@ public class FinancieroController {
         }
     }
 
-    // ESTADÍSTICAS
+    // Estadistica
     @GetMapping("/estadisticas/{idUsuario}")
     public ResponseEntity<?> obtenerEstadisticas(@PathVariable int idUsuario) {
         logger.info("Solicitud de estadísticas para usuario ID: {}", idUsuario);
@@ -180,7 +180,7 @@ public class FinancieroController {
         }
     }
 
-    // TIPOS DE FONDO
+    // Tipos de fondo
     @GetMapping("/fondos")
     public ResponseEntity<?> obtenerTodosFondos() {
         try {
@@ -203,7 +203,7 @@ public class FinancieroController {
         }
     }
 
-    // ANÁLISIS COMPARATIVO
+    // Analisis comparativo
     @GetMapping("/comparativo/{idUsuario}")
     public ResponseEntity<?> obtenerComparativo(@PathVariable int idUsuario) {
         logger.info("Solicitud de comparativo financiero para usuario ID: {}", idUsuario);

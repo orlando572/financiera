@@ -4,12 +4,6 @@ import java.util.List;
 
 import com.app.financiera.entity.Notificacion;
 
-/**
- * Servicio para gestión de notificaciones
- *
- * @author Sistema Financiero
- * @version 1.0
- */
 public interface NotificacionService {
 
     Notificacion crearYEnviarNotificacion(Notificacion notificacion);

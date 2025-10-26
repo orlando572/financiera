@@ -24,7 +24,7 @@ public class PensionesController {
     @Autowired
     private PensionesService pensionesService;
 
-    // RESUMEN GENERAL
+    // Resumen General
     @GetMapping("/resumen/{idUsuario}")
     public ResponseEntity<?> obtenerResumen(@PathVariable int idUsuario) {
         logger.info("Solicitando resumen de pensiones para usuario: {}", idUsuario);

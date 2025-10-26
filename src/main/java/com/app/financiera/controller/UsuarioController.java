@@ -48,43 +48,18 @@ public class UsuarioController {
     @Autowired
     private AfpService afpService;
 
-    // ========================================
-    // ENDPOINTS DE CONSULTA - DATOS MAESTROS
-    // ========================================
-
-    /**
-     * Obtiene la lista completa de roles disponibles en el sistema
-     *
-     * @return Lista de roles de usuario
-     */
     @GetMapping("/roles")
     @ResponseBody
     public List<RolUsuario> listarRoles() {
         return rolUsuarioService.listarRoles();
     }
 
-    /**
-     * Obtiene la lista completa de AFPs activas
-     *
-     * @return Lista de AFPs disponibles
-     */
     @GetMapping("/afps")
     @ResponseBody
     public List<Afp> listarAfps() {
         return afpService.listarAfps();
     }
 
-    // ========================================
-    // ENDPOINTS DE REGISTRO Y AUTENTICACIÓN
-    // ========================================
-
-    /**
-     * Registra un nuevo usuario en el sistema
-     * Valida que el DNI no esté duplicado antes de crear el usuario
-     *
-     * @param obj Usuario a registrar con todos sus datos
-     * @return ResponseEntity con mensaje de éxito o error
-     */
     @PostMapping("/registrarUsuario")
     @ResponseBody
     public ResponseEntity<?> registra(@RequestBody Usuario obj) {
@@ -110,13 +85,6 @@ public class UsuarioController {
         }
     }
 
-    /**
-     * Realiza el proceso de autenticación de usuario
-     * Valida DNI y contraseña (claveSol)
-     *
-     * @param credentials Mapa con "dni" y "claveSol"
-     * @return ResponseEntity con datos del usuario o mensaje de error
-     */
     @PostMapping("/login")
     @ResponseBody
     public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
@@ -151,16 +119,6 @@ public class UsuarioController {
         }
     }
 
-    // ========================================
-    // ENDPOINTS DE CONSULTA - USUARIOS
-    // ========================================
-
-    /**
-     * Busca un usuario por su ID
-     *
-     * @param id ID del usuario a buscar
-     * @return ResponseEntity con lista de usuarios encontrados
-     */
     @GetMapping("/buscarPorId/{id}")
     @ResponseBody
     public ResponseEntity<?> buscarUsuarioPorId(@PathVariable Integer id) {
@@ -173,11 +131,6 @@ public class UsuarioController {
         }
     }
 
-    /**
-     * Lista todos los usuarios del sistema
-     *
-     * @return ResponseEntity con lista completa de usuarios
-     */
     @GetMapping
     @ResponseBody
     public ResponseEntity<List<Usuario>> getAllUsuarios() {

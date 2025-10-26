@@ -11,13 +11,6 @@ import org.springframework.stereotype.Service;
 
 import jakarta.mail.internet.MimeMessage;
 
-/**
- * Implementación del servicio de envío de correos electrónicos
- * Utiliza JavaMailSender de Spring Boot
- *
- * @author Sistema Financiero
- * @version 1.0
- */
 @Service
 public class EmailServiceImpl implements EmailService {
 

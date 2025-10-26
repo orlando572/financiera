@@ -8,12 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.app.financiera.entity.HistorialRentabilidad;
 
-/**
- * Repositorio para gestión del historial de rentabilidad
- *
- * @author Sistema Financiero
- * @version 1.0
- */
 public interface HistorialRentabilidadRepository extends JpaRepository<HistorialRentabilidad, Integer> {
 
     // Buscar por AFP y tipo de fondo

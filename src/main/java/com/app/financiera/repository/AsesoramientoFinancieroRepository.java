@@ -8,12 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.app.financiera.entity.AsesoramientoFinanciero;
 
-/**
- * Repositorio para gestión de asesoramientos financieros
- *
- * @author Sistema Financiero
- * @version 1.0
- */
 public interface AsesoramientoFinancieroRepository extends JpaRepository<AsesoramientoFinanciero, Integer> {
 
     // Buscar asesoramientos por usuario

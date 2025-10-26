@@ -23,13 +23,6 @@ import com.app.financiera.entity.Afp;
 import com.app.financiera.service.AfpService;
 import com.app.financiera.util.AppSettings;
 
-/**
- * Controlador REST para administración de AFPs
- * Maneja operaciones CRUD completas y estadísticas para administradores
- *
- * @author Sistema Financiero
- * @version 1.0
- */
 @RestController
 @RequestMapping("/api/admin/afps")
 @CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
@@ -40,18 +33,6 @@ public class AdminAfpController {
     @Autowired
     private AfpService afpService;
 
-    // ========================================
-    // ENDPOINTS DE CONSULTA
-    // ========================================
-
-    /**
-     * Lista todas las AFPs con filtros opcionales
-     * Permite filtrar por nombre o estado
-     *
-     * @param busqueda Término de búsqueda para filtrar por nombre (opcional)
-     * @param estado Estado de la AFP: "Activo" o "Inactivo" (opcional)
-     * @return ResponseEntity con lista de AFPs filtradas
-     */
     @GetMapping
     public ResponseEntity<?> listarAfps(
             @RequestParam(required = false) String busqueda,
@@ -75,12 +56,6 @@ public class AdminAfpController {
         }
     }
 
-    /**
-     * Obtiene una AFP específica por su ID
-     *
-     * @param id ID de la AFP a consultar
-     * @return ResponseEntity con datos de la AFP o mensaje de error
-     */
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerAfpPorId(@PathVariable int id) {
         try {
@@ -98,12 +73,6 @@ public class AdminAfpController {
         }
     }
 
-    /**
-     * Obtiene estadísticas generales de AFPs
-     * Incluye: total, activas e inactivas
-     *
-     * @return ResponseEntity con mapa de estadísticas
-     */
     @GetMapping("/estadisticas")
     public ResponseEntity<?> obtenerEstadisticas() {
         try {
@@ -115,17 +84,6 @@ public class AdminAfpController {
         }
     }
 
-    // ========================================
-    // ENDPOINTS DE CREACIÓN Y ACTUALIZACIÓN
-    // ========================================
-
-    /**
-     * Crea una nueva AFP en el sistema
-     * Valida que no exista otra AFP con el mismo código SBS
-     *
-     * @param afp Datos de la AFP a crear
-     * @return ResponseEntity con AFP creada o mensaje de error
-     */
     @PostMapping
     public ResponseEntity<?> crearAfp(@RequestBody Afp afp) {
         HashMap<String, Object> respuesta = new HashMap<>();
@@ -152,13 +110,6 @@ public class AdminAfpController {
         }
     }
 
-    /**
-     * Actualiza los datos de una AFP existente
-     *
-     * @param id ID de la AFP a actualizar
-     * @param afp Nuevos datos de la AFP
-     * @return ResponseEntity con AFP actualizada o mensaje de error
-     */
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizarAfp(
             @PathVariable int id,
@@ -188,17 +139,6 @@ public class AdminAfpController {
         }
     }
 
-    // ========================================
-    // ENDPOINTS DE ELIMINACIÓN Y ESTADO
-    // ========================================
-
-    /**
-     * Elimina una AFP (soft delete)
-     * Cambia el estado de la AFP a "Inactivo" sin eliminarla físicamente
-     *
-     * @param id ID de la AFP a eliminar
-     * @return ResponseEntity con mensaje de confirmación o error
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarAfp(@PathVariable int id) {
         HashMap<String, Object> respuesta = new HashMap<>();
@@ -224,14 +164,6 @@ public class AdminAfpController {
         }
     }
 
-    /**
-     * Cambia el estado de una AFP
-     * Permite activar o desactivar una AFP
-     *
-     * @param id ID de la AFP
-     * @param body Mapa con el nuevo estado {"estado": "Activo"|"Inactivo"}
-     * @return ResponseEntity con AFP actualizada o mensaje de error
-     */
     @PatchMapping("/{id}/estado")
     public ResponseEntity<?> cambiarEstado(
             @PathVariable int id,
