@@ -6,3 +6,5 @@ Clave SOL: 1234
 Para realizar más pruebas, puedes modificar o revisar los usuarios directamente desde la base de datos.
 
 PERFIL DE USUARIO: Para visualizar o modificar la configuración del usuario, haz clic en la imagen del perfil dentro de la aplicación.
+
+SI ES QUE NO FUNCIONA EL CHAT BOT: usar un comando, lo piden por privado en Windows PowerShell y reinciar el IDE.
