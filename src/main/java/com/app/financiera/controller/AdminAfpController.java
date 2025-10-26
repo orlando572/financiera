@@ -2,15 +2,34 @@ package com.app.financiera.controller;
 
 import java.util.HashMap;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.app.financiera.entity.Afp;
 import com.app.financiera.service.AfpService;
 import com.app.financiera.util.AppSettings;
 
+/**
+ * Controlador REST para administración de AFPs
+ * Maneja operaciones CRUD completas y estadísticas para administradores
+ *
+ * @author Sistema Financiero
+ * @version 1.0
+ */
 @RestController
 @RequestMapping("/api/admin/afps")
 @CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
@@ -20,8 +39,19 @@ public class AdminAfpController {
 
     @Autowired
     private AfpService afpService;
-    // nnnnnn
-    // Listar todas las AFPs
+
+    // ========================================
+    // ENDPOINTS DE CONSULTA
+    // ========================================
+
+    /**
+     * Lista todas las AFPs con filtros opcionales
+     * Permite filtrar por nombre o estado
+     *
+     * @param busqueda Término de búsqueda para filtrar por nombre (opcional)
+     * @param estado Estado de la AFP: "Activo" o "Inactivo" (opcional)
+     * @return ResponseEntity con lista de AFPs filtradas
+     */
     @GetMapping
     public ResponseEntity<?> listarAfps(
             @RequestParam(required = false) String busqueda,
@@ -45,7 +75,12 @@ public class AdminAfpController {
         }
     }
 
-    // Obtener AFP por ID
+    /**
+     * Obtiene una AFP específica por su ID
+     *
+     * @param id ID de la AFP a consultar
+     * @return ResponseEntity con datos de la AFP o mensaje de error
+     */
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerAfpPorId(@PathVariable int id) {
         try {
@@ -63,7 +98,34 @@ public class AdminAfpController {
         }
     }
 
-    // Crear nueva AFP
+    /**
+     * Obtiene estadísticas generales de AFPs
+     * Incluye: total, activas e inactivas
+     *
+     * @return ResponseEntity con mapa de estadísticas
+     */
+    @GetMapping("/estadisticas")
+    public ResponseEntity<?> obtenerEstadisticas() {
+        try {
+            HashMap<String, Object> stats = afpService.obtenerEstadisticas();
+            return ResponseEntity.ok(stats);
+        } catch (Exception e) {
+            logger.error("Error al obtener estadísticas: {}", e.getMessage());
+            return ResponseEntity.status(500).body("Error al obtener estadísticas");
+        }
+    }
+
+    // ========================================
+    // ENDPOINTS DE CREACIÓN Y ACTUALIZACIÓN
+    // ========================================
+
+    /**
+     * Crea una nueva AFP en el sistema
+     * Valida que no exista otra AFP con el mismo código SBS
+     *
+     * @param afp Datos de la AFP a crear
+     * @return ResponseEntity con AFP creada o mensaje de error
+     */
     @PostMapping
     public ResponseEntity<?> crearAfp(@RequestBody Afp afp) {
         HashMap<String, Object> respuesta = new HashMap<>();
@@ -90,7 +152,13 @@ public class AdminAfpController {
         }
     }
 
-    // Actualizar AFP
+    /**
+     * Actualiza los datos de una AFP existente
+     *
+     * @param id ID de la AFP a actualizar
+     * @param afp Nuevos datos de la AFP
+     * @return ResponseEntity con AFP actualizada o mensaje de error
+     */
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizarAfp(
             @PathVariable int id,
@@ -120,7 +188,17 @@ public class AdminAfpController {
         }
     }
 
-    // Eliminar AFP (soft delete)
+    // ========================================
+    // ENDPOINTS DE ELIMINACIÓN Y ESTADO
+    // ========================================
+
+    /**
+     * Elimina una AFP (soft delete)
+     * Cambia el estado de la AFP a "Inactivo" sin eliminarla físicamente
+     *
+     * @param id ID de la AFP a eliminar
+     * @return ResponseEntity con mensaje de confirmación o error
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarAfp(@PathVariable int id) {
         HashMap<String, Object> respuesta = new HashMap<>();
@@ -146,7 +224,14 @@ public class AdminAfpController {
         }
     }
 
-    // Cambiar estado de AFP
+    /**
+     * Cambia el estado de una AFP
+     * Permite activar o desactivar una AFP
+     *
+     * @param id ID de la AFP
+     * @param body Mapa con el nuevo estado {"estado": "Activo"|"Inactivo"}
+     * @return ResponseEntity con AFP actualizada o mensaje de error
+     */
     @PatchMapping("/{id}/estado")
     public ResponseEntity<?> cambiarEstado(
             @PathVariable int id,
@@ -176,28 +261,4 @@ public class AdminAfpController {
         }
     }
 
-    // Estadísticas de AFPs
-    @GetMapping("/estadisticas")
-    public ResponseEntity<?> obtenerEstadisticas() {
-        try {
-            HashMap<String, Object> stats = new HashMap<>();
-
-            List<Afp> todas = afpService.listarAfps();
-            long activas = todas.stream()
-                    .filter(a -> "Activo".equals(a.getEstado()))
-                    .count();
-            long inactivas = todas.stream()
-                    .filter(a -> "Inactivo".equals(a.getEstado()))
-                    .count();
-
-            stats.put("total", todas.size());
-            stats.put("activas", activas);
-            stats.put("inactivas", inactivas);
-
-            return ResponseEntity.ok(stats);
-        } catch (Exception e) {
-            logger.error("Error al obtener estadísticas: {}", e.getMessage());
-            return ResponseEntity.status(500).body("Error al obtener estadísticas");
-        }
-    }
 }
