@@ -22,4 +22,6 @@ public interface AfpService {
     Afp actualizarAfp(Afp afp);
 
     void eliminarAfp(int id);
+
+    java.util.HashMap<String, Object> obtenerEstadisticas();
 }

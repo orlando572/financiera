@@ -4,30 +4,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.app.financiera.entity.Usuario;
-import com.app.financiera.entity.RolUsuario;
 import com.app.financiera.entity.Afp;
-import com.app.financiera.service.UsuarioService;
-import com.app.financiera.service.RolUsuarioService;
+import com.app.financiera.entity.RolUsuario;
+import com.app.financiera.entity.Usuario;
 import com.app.financiera.service.AfpService;
+import com.app.financiera.service.RolUsuarioService;
+import com.app.financiera.service.UsuarioService;
 import com.app.financiera.util.AppSettings;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+/**
+ * Controlador REST para gestión de usuarios públicos
+ * Maneja operaciones de registro, login y consultas básicas
+ *
+ * @author Sistema Financiero
+ * @version 1.0
+ */
 @RestController
 @RequestMapping("/api/usuario")
 @CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
@@ -44,80 +48,75 @@ public class UsuarioController {
     @Autowired
     private AfpService afpService;
 
-    // Obtener lista de roles
+    // ========================================
+    // ENDPOINTS DE CONSULTA - DATOS MAESTROS
+    // ========================================
+
+    /**
+     * Obtiene la lista completa de roles disponibles en el sistema
+     *
+     * @return Lista de roles de usuario
+     */
     @GetMapping("/roles")
     @ResponseBody
     public List<RolUsuario> listarRoles() {
         return rolUsuarioService.listarRoles();
     }
 
-    // Obtener lista de AFPs
+    /**
+     * Obtiene la lista completa de AFPs activas
+     *
+     * @return Lista de AFPs disponibles
+     */
     @GetMapping("/afps")
     @ResponseBody
     public List<Afp> listarAfps() {
         return afpService.listarAfps();
     }
 
-    // Registrar Usuario
+    // ========================================
+    // ENDPOINTS DE REGISTRO Y AUTENTICACIÓN
+    // ========================================
+
+    /**
+     * Registra un nuevo usuario en el sistema
+     * Valida que el DNI no esté duplicado antes de crear el usuario
+     *
+     * @param obj Usuario a registrar con todos sus datos
+     * @return ResponseEntity con mensaje de éxito o error
+     */
     @PostMapping("/registrarUsuario")
     @ResponseBody
     public ResponseEntity<?> registra(@RequestBody Usuario obj) {
         HashMap<String, Object> salida = new HashMap<>();
         try {
             logger.info("Intentando registrar usuario con DNI: {}", obj.getDni());
-
-            Usuario existente = usuarioService.buscarPorDni(obj.getDni());
-            if (existente != null) {
-                logger.warn("Intento de registro con DNI duplicado: {}", obj.getDni());
-                salida.put("mensaje", "Ya existe un usuario con ese DNI");
-                return ResponseEntity.status(400).body(salida);
-            }
-
             Usuario objSalida = usuarioService.registraUsuario(obj);
-            if (objSalida == null) {
-                logger.error("Error al registrar usuario con DNI: {}", obj.getDni());
-                salida.put("mensaje", "Ocurrió un error al registrar");
-            } else {
-                logger.info("Usuario registrado exitosamente: {} {} (ID: {})",
-                        objSalida.getNombre(), objSalida.getApellido(), objSalida.getIdUsuario());
-                salida.put("mensaje", "Se registró exitosamente el usuario " +
-                        "'" + objSalida.getNombre() + " " + objSalida.getApellido() + "'" +
-                        " ID asignado: " + objSalida.getIdUsuario());
-            }
+
+            salida.put("mensaje", "Se registró exitosamente el usuario " +
+                    "'" + objSalida.getNombre() + " " + objSalida.getApellido() + "'" +
+                    " ID asignado: " + objSalida.getIdUsuario());
+            logger.info("Usuario registrado exitosamente: {} {} (ID: {})",
+                    objSalida.getNombre(), objSalida.getApellido(), objSalida.getIdUsuario());
+            return ResponseEntity.ok(salida);
+        } catch (RuntimeException e) {
+            logger.warn("Error de validación al registrar usuario: {}", e.getMessage());
+            salida.put("mensaje", e.getMessage());
+            return ResponseEntity.status(400).body(salida);
         } catch (Exception e) {
             logger.error("Excepción al registrar usuario con DNI: {} - {}", obj.getDni(), e.getMessage(), e);
             salida.put("mensaje", AppSettings.MENSAJE_REG_ERROR);
-        }
-        return ResponseEntity.ok(salida);
-    }
-
-    // Buscar usuario por id
-    @GetMapping("/buscarPorId/{id}")
-    @ResponseBody
-    public ResponseEntity<?> buscarUsuarioPorId(@PathVariable Integer id) {
-        try {
-            List<Usuario> usuarios = usuarioService.buscarUsuarioPorId(id);
-            return ResponseEntity.ok(usuarios);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body("Error al buscar usuario");
+            return ResponseEntity.status(500).body(salida);
         }
     }
 
-    // Listar todos los usuarios
-    @GetMapping
-    @ResponseBody
-    public ResponseEntity<List<Usuario>> getAllUsuarios() {
-        try {
-            List<Usuario> usuarios = usuarioService.listaTodos();
-            return ResponseEntity.ok(usuarios);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body(null);
-        }
-    }
-
-    // Login
+    /**
+     * Realiza el proceso de autenticación de usuario
+     * Valida DNI y contraseña (claveSol)
+     *
+     * @param credentials Mapa con "dni" y "claveSol"
+     * @return ResponseEntity con datos del usuario o mensaje de error
+     */
     @PostMapping("/login")
     @ResponseBody
     public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
@@ -151,4 +150,44 @@ public class UsuarioController {
             return ResponseEntity.status(500).body(salida);
         }
     }
+
+    // ========================================
+    // ENDPOINTS DE CONSULTA - USUARIOS
+    // ========================================
+
+    /**
+     * Busca un usuario por su ID
+     *
+     * @param id ID del usuario a buscar
+     * @return ResponseEntity con lista de usuarios encontrados
+     */
+    @GetMapping("/buscarPorId/{id}")
+    @ResponseBody
+    public ResponseEntity<?> buscarUsuarioPorId(@PathVariable Integer id) {
+        try {
+            List<Usuario> usuarios = usuarioService.buscarUsuarioPorId(id);
+            return ResponseEntity.ok(usuarios);
+        } catch (Exception e) {
+            logger.error("Error al buscar usuario por ID {}: {}", id, e.getMessage(), e);
+            return ResponseEntity.status(500).body("Error al buscar usuario");
+        }
+    }
+
+    /**
+     * Lista todos los usuarios del sistema
+     *
+     * @return ResponseEntity con lista completa de usuarios
+     */
+    @GetMapping
+    @ResponseBody
+    public ResponseEntity<List<Usuario>> getAllUsuarios() {
+        try {
+            List<Usuario> usuarios = usuarioService.listaTodos();
+            return ResponseEntity.ok(usuarios);
+        } catch (Exception e) {
+            logger.error("Error al listar usuarios: {}", e.getMessage(), e);
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+
 }

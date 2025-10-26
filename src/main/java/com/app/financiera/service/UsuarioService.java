@@ -18,4 +18,7 @@ public interface UsuarioService {
     List<Usuario> buscarPorNombreODni(String busqueda);
     List<Usuario> buscarPorEstado(String estado);
     List<Usuario> buscarPorRol(int idRol);
+
+    // Estadísticas
+    java.util.HashMap<String, Object> obtenerEstadisticas();
 }
