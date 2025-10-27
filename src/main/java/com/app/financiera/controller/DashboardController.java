@@ -9,13 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import com.app.financiera.service.DashboardService;
 import com.app.financiera.util.AppSettings;
 
-/**
- * Controlador REST para el Dashboard
- * Proporciona información consolidada del usuario
- *
- * @author Sistema Financiero
- * @version 1.0
- */
 @RestController
 @RequestMapping("/api/dashboard")
 @CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
@@ -26,13 +19,6 @@ public class DashboardController {
     @Autowired
     private DashboardService dashboardService;
 
-    /**
-     * Obtiene el resumen completo del dashboard para el usuario
-     * Incluye información financiera, pensiones, seguros y alertas
-     *
-     * @param idUsuario ID del usuario
-     * @return ResponseEntity con el resumen completo del dashboard
-     */
     @GetMapping("/resumen/{idUsuario}")
     public ResponseEntity<?> obtenerResumenDashboard(@PathVariable int idUsuario) {
         logger.info("Solicitud de resumen de dashboard para usuario: {}", idUsuario);
@@ -48,12 +34,6 @@ public class DashboardController {
         }
     }
 
-    /**
-     * Obtiene información del perfil del usuario
-     *
-     * @param idUsuario ID del usuario
-     * @return ResponseEntity con información del perfil
-     */
     @GetMapping("/perfil/{idUsuario}")
     public ResponseEntity<?> obtenerPerfilUsuario(@PathVariable int idUsuario) {
         logger.info("Solicitud de perfil para dashboard, usuario: {}", idUsuario);
@@ -66,12 +46,6 @@ public class DashboardController {
         }
     }
 
-    /**
-     * Obtiene las alertas activas del usuario
-     *
-     * @param idUsuario ID del usuario
-     * @return ResponseEntity con lista de alertas
-     */
     @GetMapping("/alertas/{idUsuario}")
     public ResponseEntity<?> obtenerAlertas(@PathVariable int idUsuario) {
         logger.info("Solicitud de alertas para usuario: {}", idUsuario);
@@ -84,13 +58,6 @@ public class DashboardController {
         }
     }
 
-    /**
-     * Obtiene actividad reciente del usuario
-     *
-     * @param idUsuario ID del usuario
-     * @param limite Cantidad de registros a retornar (opcional, default 5)
-     * @return ResponseEntity con actividad reciente
-     */
     @GetMapping("/actividad/{idUsuario}")
     public ResponseEntity<?> obtenerActividadReciente(
             @PathVariable int idUsuario,
@@ -105,12 +72,6 @@ public class DashboardController {
         }
     }
 
-    /**
-     * Obtiene estadísticas financieras del usuario
-     *
-     * @param idUsuario ID del usuario
-     * @return ResponseEntity con estadísticas financieras
-     */
     @GetMapping("/estadisticas/{idUsuario}")
     public ResponseEntity<?> obtenerEstadisticasFinancieras(@PathVariable int idUsuario) {
         logger.info("Solicitud de estadísticas financieras para usuario: {}", idUsuario);
@@ -123,9 +84,6 @@ public class DashboardController {
         }
     }
 
-    /**
-     * Health check del dashboard
-     */
     @GetMapping("/health")
     public ResponseEntity<?> healthCheck() {
         HashMap<String, Object> health = new HashMap<>();
