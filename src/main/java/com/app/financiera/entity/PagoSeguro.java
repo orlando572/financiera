@@ -1,10 +1,11 @@
 package com.app.financiera.entity;
 
-import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -31,8 +32,16 @@ public class PagoSeguro {
     @Column(name = "fecha_pago")
     private LocalDateTime fechaPago;
 
+    @Column(name = "fecha_vencimiento")
+    private LocalDateTime fechaVencimiento;
+
+    @Column(name = "monto_cuota")
+    private Double montoCuota;
+
     @Column(name = "metodo_pago")
     private String metodoPago;
 
     private String estado; // "Pagado", "Pendiente", "Vencido", "Parcial", "Anulado"
+
+    private String observaciones;
 }

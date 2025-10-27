@@ -3,6 +3,7 @@ package com.app.financiera.repository;
 import com.app.financiera.entity.AportePension;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
 import java.util.List;
 
 public interface AportePensionRepository extends JpaRepository<AportePension, Integer> {
@@ -30,4 +31,16 @@ public interface AportePensionRepository extends JpaRepository<AportePension, In
     // Suma de aportes por usuario y año
     @Query("SELECT COALESCE(SUM(a.montoAporte), 0) FROM AportePension a WHERE a.usuario.idUsuario = ?1 AND YEAR(a.fechaAporte) = ?2")
     Double sumAportesUsuarioYear(int idUsuario, int year);
+
+    // Buscar aportes por estado
+    @Query("SELECT a FROM AportePension a WHERE a.estado = ?1 ORDER BY a.fechaAporte DESC")
+    List<AportePension> findByEstado(String estado);
+
+    // Buscar aportes por usuario y estado
+    @Query("SELECT a FROM AportePension a WHERE a.usuario.idUsuario = ?1 AND a.estado = ?2 ORDER BY a.fechaAporte DESC")
+    List<AportePension> findByUsuarioAndEstado(int idUsuario, String estado);
+
+    // Contar aportes por estado
+    @Query("SELECT COUNT(a) FROM AportePension a WHERE a.estado = ?1")
+    Long countByEstado(String estado);
 }

@@ -1,11 +1,12 @@
 package com.app.financiera.service;
 
-import java.util.HashMap;
-import java.util.List;
-import com.app.financiera.entity.Seguro;
-import com.app.financiera.entity.TramiteSeguro;
 import com.app.financiera.entity.BeneficiarioSeguro;
 import com.app.financiera.entity.PagoSeguro;
+import com.app.financiera.entity.Seguro;
+import com.app.financiera.entity.TramiteSeguro;
+
+import java.util.HashMap;
+import java.util.List;
 
 public interface SegurosService {
 
@@ -44,4 +45,8 @@ public interface SegurosService {
 
     // ESTADÍSTICAS
     HashMap<String, Object> obtenerEstadisticas(int idUsuario);
+
+    // ADMIN
+    List<Seguro> listarTodosSeguros();
+    HashMap<String, Object> obtenerEstadisticasGenerales();
 }

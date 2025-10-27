@@ -56,16 +56,16 @@ public class Seguro {
 
     private Double deducible;
 
+    @Column(name = "beneficiarios", columnDefinition = "jsonb")
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb")
     private String beneficiarios;
 
+    @Column(name = "coberturas", columnDefinition = "jsonb")
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb")
     private String coberturas;
 
+    @Column(name = "exclusiones", columnDefinition = "jsonb")
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb")
     private String exclusiones;
 
     @Column(name = "forma_pago")

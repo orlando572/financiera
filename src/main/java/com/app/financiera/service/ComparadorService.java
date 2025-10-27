@@ -1,8 +1,9 @@
 package com.app.financiera.service;
 
+import com.app.financiera.entity.CompaniaSeguro;
 import com.app.financiera.entity.Seguro;
 import com.app.financiera.entity.TipoSeguro;
-import com.app.financiera.entity.CompaniaSeguro;
+
 import java.util.List;
 import java.util.Map;
 

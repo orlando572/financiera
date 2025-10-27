@@ -1,12 +1,11 @@
 package com.app.financiera.repository;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
+import com.app.financiera.entity.AsesoramientoFinanciero;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.app.financiera.entity.AsesoramientoFinanciero;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public interface AsesoramientoFinancieroRepository extends JpaRepository<AsesoramientoFinanciero, Integer> {
 

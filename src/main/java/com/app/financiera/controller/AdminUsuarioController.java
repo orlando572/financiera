@@ -1,27 +1,17 @@
 package com.app.financiera.controller;
 
-import java.util.HashMap;
-import java.util.List;
-
+import com.app.financiera.entity.Usuario;
+import com.app.financiera.service.UsuarioService;
+import com.app.financiera.util.AppSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.app.financiera.entity.Usuario;
-import com.app.financiera.service.UsuarioService;
-import com.app.financiera.util.AppSettings;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin/usuarios")
@@ -86,112 +76,66 @@ public class AdminUsuarioController {
 
     @PostMapping
     public ResponseEntity<?> crearUsuario(@RequestBody Usuario usuario) {
-        HashMap<String, Object> respuesta = new HashMap<>();
         try {
             logger.info("Creando nuevo usuario: {}", usuario.getDni());
-
-            // Verificar si ya existe
-            Usuario existente = usuarioService.buscarPorDni(usuario.getDni());
-            if (existente != null) {
-                respuesta.put("mensaje", "Ya existe un usuario con ese DNI");
-                return ResponseEntity.status(400).body(respuesta);
-            }
-
             Usuario nuevoUsuario = usuarioService.registraUsuario(usuario);
-            respuesta.put("mensaje", "Usuario creado exitosamente");
-            respuesta.put("data", nuevoUsuario);
-
-            return ResponseEntity.ok(respuesta);
+            return ResponseEntity.ok(Map.of("mensaje", "Usuario creado exitosamente", "data", nuevoUsuario));
+        } catch (RuntimeException e) {
+            logger.warn("Error de validación al crear usuario: {}", e.getMessage());
+            return ResponseEntity.status(400).body(Map.of("mensaje", e.getMessage()));
         } catch (Exception e) {
             logger.error("Error al crear usuario: {}", e.getMessage());
-            respuesta.put("mensaje", "Error al crear usuario");
-            respuesta.put("error", e.getMessage());
-            return ResponseEntity.status(500).body(respuesta);
+            return ResponseEntity.status(500).body(Map.of("mensaje", "Error al crear usuario", "error", e.getMessage()));
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarUsuario(
-            @PathVariable int id,
-            @RequestBody Usuario usuario) {
-        HashMap<String, Object> respuesta = new HashMap<>();
+    public ResponseEntity<?> actualizarUsuario(@PathVariable int id, @RequestBody Usuario usuario) {
         try {
             logger.info("Actualizando usuario ID: {}", id);
-
-            List<Usuario> existente = usuarioService.buscarUsuarioPorId(id);
-            if (existente.isEmpty()) {
-                respuesta.put("mensaje", "Usuario no encontrado");
-                return ResponseEntity.status(404).body(respuesta);
-            }
-
             usuario.setIdUsuario(id);
             Usuario actualizado = usuarioService.actualizaUsuario(usuario);
-
-            respuesta.put("mensaje", "Usuario actualizado exitosamente");
-            respuesta.put("data", actualizado);
-
-            return ResponseEntity.ok(respuesta);
+            return ResponseEntity.ok(Map.of("mensaje", "Usuario actualizado exitosamente", "data", actualizado));
         } catch (Exception e) {
             logger.error("Error al actualizar usuario: {}", e.getMessage());
-            respuesta.put("mensaje", "Error al actualizar usuario");
-            respuesta.put("error", e.getMessage());
-            return ResponseEntity.status(500).body(respuesta);
+            return ResponseEntity.status(500).body(Map.of("mensaje", "Error al actualizar usuario", "error", e.getMessage()));
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarUsuario(@PathVariable int id) {
-        HashMap<String, Object> respuesta = new HashMap<>();
         try {
             logger.info("Eliminando usuario ID: {}", id);
-
             List<Usuario> existente = usuarioService.buscarUsuarioPorId(id);
             if (existente.isEmpty()) {
-                respuesta.put("mensaje", "Usuario no encontrado");
-                return ResponseEntity.status(404).body(respuesta);
+                return ResponseEntity.status(404).body(Map.of("mensaje", "Usuario no encontrado"));
             }
-
             Usuario usuario = existente.get(0);
             usuario.setEstado("Inactivo");
             usuarioService.actualizaUsuario(usuario);
-
-            respuesta.put("mensaje", "Usuario eliminado exitosamente");
-            return ResponseEntity.ok(respuesta);
+            return ResponseEntity.ok(Map.of("mensaje", "Usuario eliminado exitosamente"));
         } catch (Exception e) {
             logger.error("Error al eliminar usuario: {}", e.getMessage());
-            respuesta.put("mensaje", "Error al eliminar usuario");
-            respuesta.put("error", e.getMessage());
-            return ResponseEntity.status(500).body(respuesta);
+            return ResponseEntity.status(500).body(Map.of("mensaje", "Error al eliminar usuario", "error", e.getMessage()));
         }
     }
 
     @PatchMapping("/{id}/estado")
-    public ResponseEntity<?> cambiarEstado(
-            @PathVariable int id,
-            @RequestBody HashMap<String, String> body) {
-        HashMap<String, Object> respuesta = new HashMap<>();
+    public ResponseEntity<?> cambiarEstado(@PathVariable int id, @RequestBody HashMap<String, String> body) {
         try {
             String nuevoEstado = body.get("estado");
             logger.info("Cambiando estado de usuario ID {} a {}", id, nuevoEstado);
-
             List<Usuario> existente = usuarioService.buscarUsuarioPorId(id);
             if (existente.isEmpty()) {
-                respuesta.put("mensaje", "Usuario no encontrado");
-                return ResponseEntity.status(404).body(respuesta);
+                return ResponseEntity.status(404).body(Map.of("mensaje", "Usuario no encontrado"));
             }
-
             Usuario usuario = existente.get(0);
             usuario.setEstado(nuevoEstado);
             usuarioService.actualizaUsuario(usuario);
-
-            respuesta.put("mensaje", "Estado actualizado exitosamente");
-            respuesta.put("data", usuario);
-
-            return ResponseEntity.ok(respuesta);
+            return ResponseEntity.ok(Map.of("mensaje", "Estado actualizado exitosamente", "data", usuario));
         } catch (Exception e) {
             logger.error("Error al cambiar estado: {}", e.getMessage());
-            respuesta.put("mensaje", "Error al cambiar estado");
-            return ResponseEntity.status(500).body(respuesta);
+            return ResponseEntity.status(500).body(Map.of("mensaje", "Error al cambiar estado"));
         }
     }
 }

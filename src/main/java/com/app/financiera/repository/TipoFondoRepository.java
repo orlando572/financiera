@@ -3,6 +3,7 @@ package com.app.financiera.repository;
 import com.app.financiera.entity.TipoFondo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
 import java.util.List;
 
 public interface TipoFondoRepository extends JpaRepository<TipoFondo, Integer> {
