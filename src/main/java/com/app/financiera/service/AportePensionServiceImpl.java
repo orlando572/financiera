@@ -1,23 +1,22 @@
 package com.app.financiera.service;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
+import com.app.financiera.entity.AportePension;
+import com.app.financiera.entity.Institucion;
+import com.app.financiera.entity.SaldoPension;
+import com.app.financiera.entity.Usuario;
+import com.app.financiera.repository.AportePensionRepository;
+import com.app.financiera.repository.InstitucionRepository;
+import com.app.financiera.repository.SaldoPensionRepository;
+import com.app.financiera.repository.UsuarioRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.app.financiera.entity.AportePension;
-import com.app.financiera.entity.SaldoPension;
-import com.app.financiera.entity.Usuario;
-import com.app.financiera.entity.Institucion;
-import com.app.financiera.repository.AportePensionRepository;
-import com.app.financiera.repository.SaldoPensionRepository;
-import com.app.financiera.repository.UsuarioRepository;
-import com.app.financiera.repository.InstitucionRepository;
-
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AportePensionServiceImpl implements AportePensionService {
@@ -35,6 +34,11 @@ public class AportePensionServiceImpl implements AportePensionService {
 
     @Autowired
     private InstitucionRepository institucionRepository;
+
+    @Autowired
+    private HistorialConsultasService historialConsultasService;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public List<AportePension> obtenerAportesUsuario(int idUsuario) {
@@ -70,15 +74,27 @@ public class AportePensionServiceImpl implements AportePensionService {
     public AportePension guardarAporte(AportePension aporte) {
         logger.info("Guardando aporte para usuario: {}", aporte.getUsuario().getIdUsuario());
 
-        // SINCRONIZAR INSTITUCIÓN CON EL PERFIL ACTUAL DEL USUARIO
-        sincronizarInstitucionConUsuario(aporte);
+        try {
+            // SINCRONIZAR INSTITUCIÓN CON EL PERFIL ACTUAL DEL USUARIO
+            sincronizarInstitucionConUsuario(aporte);
 
-        AportePension aporteGuardado = aportePensionRepository.save(aporte);
+            AportePension aporteGuardado = aportePensionRepository.save(aporte);
 
-        // Actualizar saldo automáticamente
-        actualizarSaldoUsuario(aporte.getUsuario().getIdUsuario());
+            // Actualizar saldo automáticamente
+            actualizarSaldoUsuario(aporte.getUsuario().getIdUsuario());
 
-        return aporteGuardado;
+            // Registrar en historial
+            registrarEnHistorial(aporte.getUsuario().getIdUsuario(), "Aporte", 
+                "Aporte registrado: " + aporte.getPeriodo() + " - S/ " + aporte.getMontoAporte(),
+                "Exitoso", crearDetallesAporte(aporteGuardado));
+
+            return aporteGuardado;
+        } catch (Exception e) {
+            logger.error("Error al guardar aporte: {}", e.getMessage());
+            registrarEnHistorial(aporte.getUsuario().getIdUsuario(), "Aporte",
+                "Error al registrar aporte: " + aporte.getPeriodo(), "Error", e.getMessage());
+            throw e;
+        }
     }
 
     @Override
@@ -251,6 +267,32 @@ public class AportePensionServiceImpl implements AportePensionService {
 
         } catch (Exception e) {
             logger.error("Error al actualizar saldo del usuario {}: {}", idUsuario, e.getMessage(), e);
+        }
+    }
+
+    private void registrarEnHistorial(int idUsuario, String tipoConsulta, String detalleConsulta,
+                                      String resultado, String detallesAdicionales) {
+        try {
+            historialConsultasService.registrarConsulta(idUsuario, tipoConsulta, detalleConsulta,
+                    resultado, detallesAdicionales);
+        } catch (Exception e) {
+            logger.error("Error al registrar en historial: {}", e.getMessage());
+        }
+    }
+
+    private String crearDetallesAporte(AportePension aporte) {
+        try {
+            String institucion = aporte.getInstitucion() != null ? aporte.getInstitucion().getNombre() : "N/A";
+            return String.format("{\"idAporte\":%d,\"periodo\":\"%s\",\"monto\":%.2f,\"trabajador\":%.2f,\"empleador\":%.2f,\"institucion\":\"%s\"}",
+                    aporte.getIdAporte(),
+                    aporte.getPeriodo(),
+                    aporte.getMontoAporte(),
+                    aporte.getAporteTrabajador() != null ? aporte.getAporteTrabajador() : 0.0,
+                    aporte.getAporteEmpleador() != null ? aporte.getAporteEmpleador() : 0.0,
+                    institucion);
+        } catch (Exception e) {
+            logger.error("Error al crear detalles JSON: {}", e.getMessage());
+            return "{}";
         }
     }
 }

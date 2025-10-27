@@ -3,6 +3,7 @@ package com.app.financiera.repository;
 import com.app.financiera.entity.Seguro;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
 import java.util.List;
 
 public interface SeguroRepository extends JpaRepository<Seguro, Integer> {
@@ -24,7 +25,7 @@ public interface SeguroRepository extends JpaRepository<Seguro, Integer> {
     List<Seguro> findByCompania(int idCompania);
 
     // Obtener seguros de un usuario
-    @Query("SELECT s FROM Seguro s WHERE s.usuario.idUsuario = ?1 AND (s.estado = 'Activo' OR s.estado = 'Vigente')")
+    @Query("SELECT s FROM Seguro s WHERE s.usuario.idUsuario = ?1 AND s.estado = 'Activo'")
     List<Seguro> findByUsuario(int idUsuario);
 
     // Buscar seguros por rango de prima mensual

@@ -3,6 +3,7 @@ package com.app.financiera.repository;
 import com.app.financiera.entity.Administrador;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
 import java.util.List;
 
 public interface AdministradorRepository extends JpaRepository<Administrador, Integer> {

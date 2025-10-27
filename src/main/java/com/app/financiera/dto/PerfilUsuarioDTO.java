@@ -2,6 +2,7 @@ package com.app.financiera.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+
 import java.util.Date;
 
 @Getter

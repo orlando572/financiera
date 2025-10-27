@@ -1,25 +1,19 @@
 package com.app.financiera.service;
 
+import com.app.financiera.entity.*;
+import com.app.financiera.repository.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import com.app.financiera.entity.*;
-import com.app.financiera.repository.*;
-
-/**
- * Implementación del servicio de Dashboard
- *
- * @author Sistema Financiero
- * @version 1.0
- */
 @Service
 public class DashboardServiceImpl implements DashboardService {
 
@@ -257,7 +251,7 @@ public class DashboardServiceImpl implements DashboardService {
             List<PagoSeguro> pagosPendientes = pagoSeguroRepository.findPendientesByUsuario(idUsuario);
             if (!pagosPendientes.isEmpty()) {
                 Double montoPendiente = pagosPendientes.stream()
-                        .mapToDouble(p -> p.getMontoPagado() != null ? p.getMontoPagado() : 0)
+                        .mapToDouble(p -> p.getMontoCuota() != null ? p.getMontoCuota() : 0)
                         .sum();
 
                 HashMap<String, Object> alerta = new HashMap<>();
@@ -456,9 +450,6 @@ public class DashboardServiceImpl implements DashboardService {
         return estadisticas;
     }
 
-    /**
-     * Método auxiliar para obtener icono según tipo de actividad
-     */
     private String getIconoActividad(String tipoConsulta) {
         switch (tipoConsulta != null ? tipoConsulta : "") {
             case "Aporte": return "DollarSign";

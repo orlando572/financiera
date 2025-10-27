@@ -1,12 +1,11 @@
 package com.app.financiera.repository;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.app.financiera.entity.Asesor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.app.financiera.entity.Asesor;
+import java.util.List;
+import java.util.Optional;
 
 public interface AsesorRepository extends JpaRepository<Asesor, Integer> {
 

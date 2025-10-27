@@ -3,6 +3,7 @@ package com.app.financiera.repository;
 import com.app.financiera.entity.BeneficiarioSeguro;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
 import java.util.List;
 
 public interface BeneficiarioSeguroRepository extends JpaRepository<BeneficiarioSeguro, Integer> {
@@ -18,4 +19,8 @@ public interface BeneficiarioSeguroRepository extends JpaRepository<Beneficiario
     // Contar beneficiarios activos por seguro
     @Query("SELECT COUNT(b) FROM BeneficiarioSeguro b WHERE b.seguro.idSeguro = ?1 AND b.estado = 'Activo'")
     long countBySeguroId(int idSeguro);
+
+    // Obtener beneficiarios por usuario (a través de seguro)
+    @Query("SELECT b FROM BeneficiarioSeguro b WHERE b.seguro.usuario.idUsuario = ?1 AND b.estado = 'Activo'")
+    List<BeneficiarioSeguro> findByUsuarioId(Integer idUsuario);
 }

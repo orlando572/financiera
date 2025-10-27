@@ -1,18 +1,20 @@
 package com.app.financiera.controller;
 
-import java.util.HashMap;
-import java.util.List;
+import com.app.financiera.entity.AportePension;
+import com.app.financiera.entity.ConsultaAportes;
+import com.app.financiera.entity.HistorialConsultas;
+import com.app.financiera.entity.SaldoPension;
+import com.app.financiera.service.PensionesService;
+import com.app.financiera.util.AppSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.app.financiera.entity.AportePension;
-import com.app.financiera.entity.SaldoPension;
-import com.app.financiera.entity.ConsultaAportes;
-import com.app.financiera.entity.HistorialConsultas;
-import com.app.financiera.service.PensionesService;
-import com.app.financiera.util.AppSettings;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/pensiones")
@@ -71,7 +73,7 @@ public class PensionesController {
             List<AportePension> aportes = pensionesService.obtenerAportesAFP(idUsuario);
             return ResponseEntity.ok(aportes);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error al obtener aportes AFP");
+            return ResponseEntity.status(500).body(Map.of("mensaje", "Error al obtener aportes AFP", "error", e.getMessage()));
         }
     }
 
@@ -81,16 +83,10 @@ public class PensionesController {
         logger.info("Creando nuevo aporte para usuario: {}", aporte.getUsuario().getIdUsuario());
         try {
             AportePension nuevoAporte = pensionesService.crearAporte(aporte);
-            HashMap<String, Object> respuesta = new HashMap<>();
-            respuesta.put("mensaje", "Aporte registrado exitosamente");
-            respuesta.put("data", nuevoAporte);
-            return ResponseEntity.ok(respuesta);
+            return ResponseEntity.ok(Map.of("mensaje", "Aporte registrado exitosamente", "data", nuevoAporte));
         } catch (Exception e) {
             logger.error("Error al crear aporte: {}", e.getMessage());
-            HashMap<String, Object> error = new HashMap<>();
-            error.put("mensaje", "Error al registrar aporte");
-            error.put("error", e.getMessage());
-            return ResponseEntity.status(500).body(error);
+            return ResponseEntity.status(500).body(Map.of("mensaje", "Error al registrar aporte", "error", e.getMessage()));
         }
     }
 
@@ -101,13 +97,10 @@ public class PensionesController {
         try {
             aporte.setIdAporte(idAporte);
             AportePension actualizado = pensionesService.actualizarAporte(aporte);
-            HashMap<String, Object> respuesta = new HashMap<>();
-            respuesta.put("mensaje", "Aporte actualizado exitosamente");
-            respuesta.put("data", actualizado);
-            return ResponseEntity.ok(respuesta);
+            return ResponseEntity.ok(Map.of("mensaje", "Aporte actualizado exitosamente", "data", actualizado));
         } catch (Exception e) {
             logger.error("Error al actualizar aporte: {}", e.getMessage());
-            return ResponseEntity.status(500).body("Error al actualizar aporte");
+            return ResponseEntity.status(500).body(Map.of("mensaje", "Error al actualizar aporte", "error", e.getMessage()));
         }
     }
 
@@ -117,12 +110,10 @@ public class PensionesController {
         logger.info("Eliminando aporte: {}", idAporte);
         try {
             pensionesService.eliminarAporte(idAporte);
-            HashMap<String, Object> respuesta = new HashMap<>();
-            respuesta.put("mensaje", "Aporte eliminado exitosamente");
-            return ResponseEntity.ok(respuesta);
+            return ResponseEntity.ok(Map.of("mensaje", "Aporte eliminado exitosamente"));
         } catch (Exception e) {
             logger.error("Error al eliminar aporte: {}", e.getMessage());
-            return ResponseEntity.status(500).body("Error al eliminar aporte");
+            return ResponseEntity.status(500).body(Map.of("mensaje", "Error al eliminar aporte", "error", e.getMessage()));
         }
     }
 
@@ -135,7 +126,7 @@ public class PensionesController {
             return ResponseEntity.ok(saldos);
         } catch (Exception e) {
             logger.error("Error al obtener saldos: {}", e.getMessage());
-            return ResponseEntity.status(500).body("Error al obtener saldos");
+            return ResponseEntity.status(500).body(Map.of("mensaje", "Error al obtener saldos", "error", e.getMessage()));
         }
     }
 
@@ -144,11 +135,9 @@ public class PensionesController {
     public ResponseEntity<?> obtenerSaldoTotal(@PathVariable int idUsuario) {
         try {
             Double total = pensionesService.obtenerSaldoTotal(idUsuario);
-            HashMap<String, Object> respuesta = new HashMap<>();
-            respuesta.put("saldoTotal", total);
-            return ResponseEntity.ok(respuesta);
+            return ResponseEntity.ok(Map.of("saldoTotal", total));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error al obtener saldo total");
+            return ResponseEntity.status(500).body(Map.of("mensaje", "Error al obtener saldo total", "error", e.getMessage()));
         }
     }
 
@@ -157,11 +146,9 @@ public class PensionesController {
     public ResponseEntity<?> obtenerSaldoDisponible(@PathVariable int idUsuario) {
         try {
             Double disponible = pensionesService.obtenerSaldoDisponible(idUsuario);
-            HashMap<String, Object> respuesta = new HashMap<>();
-            respuesta.put("saldoDisponible", disponible);
-            return ResponseEntity.ok(respuesta);
+            return ResponseEntity.ok(Map.of("saldoDisponible", disponible));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error al obtener saldo disponible");
+            return ResponseEntity.status(500).body(Map.of("mensaje", "Error al obtener saldo disponible", "error", e.getMessage()));
         }
     }
 
@@ -170,11 +157,11 @@ public class PensionesController {
     public ResponseEntity<?> obtenerProyecciones(@PathVariable int idUsuario) {
         logger.info("Solicitando proyecciones para usuario: {}", idUsuario);
         try {
-            HashMap<String, Object> proyecciones = pensionesService.obtenerProyecciones(idUsuario);
+            Map<String, Object> proyecciones = pensionesService.obtenerProyecciones(idUsuario);
             return ResponseEntity.ok(proyecciones);
         } catch (Exception e) {
             logger.error("Error al obtener proyecciones: {}", e.getMessage());
-            return ResponseEntity.status(500).body("Error al obtener proyecciones");
+            return ResponseEntity.status(500).body(Map.of("mensaje", "Error al obtener proyecciones", "error", e.getMessage()));
         }
     }
 
@@ -183,14 +170,15 @@ public class PensionesController {
     public ResponseEntity<?> obtenerEstado(@PathVariable int idUsuario) {
         logger.info("Solicitando estado de pensiones para usuario: {}", idUsuario);
         try {
-            HashMap<String, Object> estado = new HashMap<>();
-            estado.put("estadoAFP", pensionesService.obtenerEstadoAFP(idUsuario));
-            estado.put("estadoONP", pensionesService.obtenerEstadoONP(idUsuario));
-            estado.put("años", pensionesService.obtenerAñosAportados(idUsuario));
+            Map<String, Object> estado = Map.of(
+                "estadoAFP", pensionesService.obtenerEstadoAFP(idUsuario),
+                "estadoONP", pensionesService.obtenerEstadoONP(idUsuario),
+                "años", pensionesService.obtenerAñosAportados(idUsuario)
+            );
             return ResponseEntity.ok(estado);
         } catch (Exception e) {
             logger.error("Error al obtener estado: {}", e.getMessage());
-            return ResponseEntity.status(500).body("Error al obtener estado");
+            return ResponseEntity.status(500).body(Map.of("mensaje", "Error al obtener estado", "error", e.getMessage()));
         }
     }
 
@@ -203,7 +191,7 @@ public class PensionesController {
             return ResponseEntity.ok(nueva);
         } catch (Exception e) {
             logger.error("Error al registrar consulta: {}", e.getMessage());
-            return ResponseEntity.status(500).body("Error al registrar consulta");
+            return ResponseEntity.status(500).body(Map.of("mensaje", "Error al registrar consulta", "error", e.getMessage()));
         }
     }
 
@@ -214,7 +202,7 @@ public class PensionesController {
             List<ConsultaAportes> consultas = pensionesService.obtenerConsultasUsuario(idUsuario);
             return ResponseEntity.ok(consultas);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error al obtener consultas");
+            return ResponseEntity.status(500).body(Map.of("mensaje", "Error al obtener consultas", "error", e.getMessage()));
         }
     }
 
