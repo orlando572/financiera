@@ -111,14 +111,12 @@
 			<version>7.2.5</version>
 		</dependency>
 
-		<!-- iText 7 - Módulo Layout (tablas, párrafos, etc.) -->
 		<dependency>
 			<groupId>com.itextpdf</groupId>
 			<artifactId>layout</artifactId>
 			<version>7.2.5</version>
 		</dependency>
 
-		<!-- iText 7 - Módulo IO (manejo de fuentes y recursos) -->
 		<dependency>
 			<groupId>com.itextpdf</groupId>
 			<artifactId>io</artifactId>

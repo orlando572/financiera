@@ -26,10 +26,8 @@ public class PdfExportController {
     @Autowired
     private PdfExportService pdfExportService;
 
-    /**
-     * Endpoint para exportar el Panel Financiero a PDF
-     * GET /api/pdf-export/panel-financiero/{idUsuario}
-     */
+    //Endpoint para exportar el Panel Financiero a PDF GET /api/pdf-export/panel-financiero/{idUsuario}
+
     @GetMapping("/panel-financiero/{idUsuario}")
     public ResponseEntity<byte[]> exportarPanelFinanciero(@PathVariable int idUsuario) {
         logger.info("Solicitud de exportación PDF del Panel Financiero para usuario: {}", idUsuario);
@@ -77,10 +75,8 @@ public class PdfExportController {
                 .body("{\"status\": \"OK\", \"servicio\": \"Exportación PDF\", \"version\": \"1.0.0\"}");
     }
 
-    /**
-     * Endpoint para exportar Gestión de Pensiones a PDF
-     * GET /api/pdf-export/gestion-pensiones/{idUsuario}
-     */
+    //Endpoint para exportar Gestión de Pensiones a PDF GET /api/pdf-export/gestion-pensiones/{idUsuario}
+
     @GetMapping("/gestion-pensiones/{idUsuario}")
     public ResponseEntity<byte[]> exportarGestionPensiones(@PathVariable int idUsuario) {
         logger.info("Solicitud de exportación PDF de Gestión de Pensiones para usuario: {}", idUsuario);
@@ -121,10 +117,8 @@ public class PdfExportController {
         }
     }
 
-    /**
-     * Endpoint para exportar Gestión de Seguros a PDF
-     * GET /api/pdf-export/gestion-seguros/{idUsuario}
-     */
+    //Endpoint para exportar Gestión de Seguros a PDF GET /api/pdf-export/gestion-seguros/{idUsuario}
+
     @GetMapping("/gestion-seguros/{idUsuario}")
     public ResponseEntity<byte[]> exportarGestionSeguros(@PathVariable int idUsuario) {
         logger.info("Solicitud de exportación PDF de Gestión de Seguros para usuario: {}", idUsuario);

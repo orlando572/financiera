@@ -46,9 +46,7 @@ public class PdfExportService {
     private static final DeviceRgb AZUL_PRINCIPAL = new DeviceRgb(41, 98, 255);
     private static final DeviceRgb GRIS_CLARO = new DeviceRgb(248, 249, 250);
 
-    /**
-     * Genera PDF del Panel Financiero
-     */
+    //Genera PDF del Panel Financiero
     public byte[] generarPdfPanelFinanciero(int idUsuario) {
         logger.info("Generando PDF del Panel Financiero para usuario: {}", idUsuario);
 
@@ -358,9 +356,8 @@ public class PdfExportService {
                 .setPadding(4)
                 .setTextAlignment(TextAlignment.LEFT);
     }
-    /**
-     * Genera PDF de Gestión de Pensiones
-     */
+    //Genera PDF de Gestión de Pensiones
+
     public byte[] generarPdfGestionPensiones(int idUsuario) {
         logger.info("Generando PDF de Gestión de Pensiones para usuario: {}", idUsuario);
 
@@ -414,9 +411,7 @@ public class PdfExportService {
         }
     }
 
-    /**
-     * Genera PDF de Gestión de Seguros
-     */
+    //Genera PDF de Gestión de Seguros
     public byte[] generarPdfGestionSeguros(int idUsuario) {
         logger.info("Generando PDF de Gestión de Seguros para usuario: {}", idUsuario);
 
@@ -470,7 +465,7 @@ public class PdfExportService {
         }
     }
 
-// ============== MÉTODOS AUXILIARES PARA GESTIÓN DE PENSIONES ==============
+//  GESTIÓN DE PENSIONES
 
     private void agregarEncabezadoPensiones(Document document, PdfFont fontBold, Usuario usuario) {
         Paragraph titulo = new Paragraph("GESTIÓN DE PENSIONES")
@@ -753,7 +748,7 @@ public class PdfExportService {
         document.add(tablaEstado);
     }
 
-// ============== MÉTODOS AUXILIARES PARA GESTIÓN DE SEGUROS ==============
+// PARA GESTIÓN DE SEGUROS
 
     @Autowired
     private SegurosService segurosService;
