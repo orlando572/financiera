@@ -1,12 +1,12 @@
 package com.app.financiera.repository;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.app.financiera.entity.HistorialRentabilidad;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.app.financiera.entity.HistorialRentabilidad;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 public interface HistorialRentabilidadRepository extends JpaRepository<HistorialRentabilidad, Integer> {
 
@@ -41,4 +41,8 @@ public interface HistorialRentabilidadRepository extends JpaRepository<Historial
     // Comparar AFPs en un periodo
     @Query("SELECT h FROM HistorialRentabilidad h WHERE h.periodo = ?1 AND h.tipoFondo.idTipoFondo = ?2 ORDER BY h.rentabilidadReal DESC")
     List<HistorialRentabilidad> compararAfpsPorPeriodo(String periodo, int idTipoFondo);
+
+    // Buscar por rango de fechas
+    @Query("SELECT h FROM HistorialRentabilidad h WHERE h.fechaRegistro BETWEEN ?1 AND ?2 ORDER BY h.fechaRegistro DESC")
+    List<HistorialRentabilidad> findByFechaRegistroBetween(LocalDateTime fechaInicio, LocalDateTime fechaFin);
 }

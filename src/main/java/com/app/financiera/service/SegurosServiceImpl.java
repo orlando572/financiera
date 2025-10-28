@@ -1,22 +1,23 @@
 package com.app.financiera.service;
 
+import com.app.financiera.entity.BeneficiarioSeguro;
+import com.app.financiera.entity.PagoSeguro;
+import com.app.financiera.entity.Seguro;
+import com.app.financiera.entity.TramiteSeguro;
+import com.app.financiera.repository.BeneficiarioSeguroRepository;
+import com.app.financiera.repository.PagoSeguroRepository;
+import com.app.financiera.repository.SeguroRepository;
+import com.app.financiera.repository.TramiteSeguroRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.app.financiera.entity.Seguro;
-import com.app.financiera.entity.TramiteSeguro;
-import com.app.financiera.entity.BeneficiarioSeguro;
-import com.app.financiera.entity.PagoSeguro;
-import com.app.financiera.repository.SeguroRepository;
-import com.app.financiera.repository.TramiteSeguroRepository;
-import com.app.financiera.repository.BeneficiarioSeguroRepository;
-import com.app.financiera.repository.PagoSeguroRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Service
 public class SegurosServiceImpl implements SegurosService {
@@ -34,6 +35,9 @@ public class SegurosServiceImpl implements SegurosService {
 
     @Autowired
     private PagoSeguroRepository pagoRepository;
+
+    @Autowired
+    private PagoSeguroService pagoSeguroService;
 
     @Override
     public HashMap<String, Object> obtenerResumenAdministrativo(int idUsuario) {
@@ -94,7 +98,21 @@ public class SegurosServiceImpl implements SegurosService {
         if (seguro.getFechaRegistro() == null) {
             seguro.setFechaRegistro(new java.sql.Timestamp(System.currentTimeMillis()));
         }
-        return seguroRepository.save(seguro);
+        // Asegurar que siempre esté activa
+        if (seguro.getEstado() == null || seguro.getEstado().isEmpty()) {
+            seguro.setEstado("Activo");
+        }
+        Seguro nuevoSeguro = seguroRepository.save(seguro);
+        
+        // Generar pagos automáticamente
+        try {
+            pagoSeguroService.generarPagosAutomaticos(nuevoSeguro);
+            logger.info("Pagos generados automáticamente para seguro ID: {}", nuevoSeguro.getIdSeguro());
+        } catch (Exception e) {
+            logger.error("Error al generar pagos automáticos: {}", e.getMessage());
+        }
+        
+        return nuevoSeguro;
     }
 
     @Override
@@ -110,6 +128,14 @@ public class SegurosServiceImpl implements SegurosService {
         if (seguro != null) {
             seguro.setEstado("Cancelado");
             seguroRepository.save(seguro);
+            
+            // Eliminar pagos pendientes del seguro cancelado
+            try {
+                pagoSeguroService.eliminarPagosDeSeguro(idSeguro);
+                logger.info("Pagos eliminados para seguro cancelado ID: {}", idSeguro);
+            } catch (Exception e) {
+                logger.error("Error al eliminar pagos: {}", e.getMessage());
+            }
         }
     }
 
@@ -187,13 +213,13 @@ public class SegurosServiceImpl implements SegurosService {
     @Override
     public PagoSeguro registrarPago(PagoSeguro pago) {
         logger.info("Registrando pago para seguro ID: {}", pago.getSeguro().getIdSeguro());
-        if (pago.getFechaPago() == null) {
-            pago.setFechaPago(LocalDateTime.now());
-        }
-        if (pago.getEstado() == null) {
-            pago.setEstado("Pagado");
-        }
-        return pagoRepository.save(pago);
+        
+        // Usar el servicio de pagos para registrar correctamente
+        return pagoSeguroService.registrarPagoRealizado(
+            pago.getIdPago(),
+            pago.getMontoPagado(),
+            pago.getMetodoPago()
+        );
     }
 
     @Override
@@ -247,27 +273,47 @@ public class SegurosServiceImpl implements SegurosService {
     @Override
     public HashMap<String, Object> obtenerEstadisticas(int idUsuario) {
         HashMap<String, Object> stats = new HashMap<>();
-
+        
         List<Seguro> seguros = obtenerSegurosUsuario(idUsuario);
-        long activos = seguros.stream()
-                .filter(s -> "Vigente".equals(s.getEstado()) || "Activo".equals(s.getEstado()))
-                .count();
-
-        Double primaTotal = seguros.stream()
-                .filter(s -> "Vigente".equals(s.getEstado()) || "Activo".equals(s.getEstado()))
-                .mapToDouble(s -> s.getPrimaMensual() != null ? s.getPrimaMensual() : 0)
-                .sum();
-
-        Double coberturaTotal = seguros.stream()
-                .filter(s -> "Vigente".equals(s.getEstado()) || "Activo".equals(s.getEstado()))
-                .mapToDouble(s -> s.getMontoAsegurado() != null ? s.getMontoAsegurado() : 0)
-                .sum();
+        List<Seguro> activos = obtenerSegurosActivos(idUsuario);
+        List<PagoSeguro> pagosPendientes = obtenerPagosPendientes(idUsuario);
+        
 
         stats.put("totalSeguros", seguros.size());
-        stats.put("segurosActivos", activos);
-        stats.put("primaMensualTotal", primaTotal);
-        stats.put("coberturaTotalAsegurada", coberturaTotal);
+        stats.put("segurosActivos", activos.size());
+        stats.put("pagosPendientes", pagosPendientes.size());
+        stats.put("totalPendiente", calcularTotalPendiente(idUsuario));
 
+        return stats;
+    }
+
+    @Override
+    public List<Seguro> listarTodosSeguros() {
+        logger.info("Listando todos los seguros del sistema");
+        return seguroRepository.findAll();
+    }
+
+    @Override
+    public HashMap<String, Object> obtenerEstadisticasGenerales() {
+        logger.info("Obteniendo estadísticas generales del sistema");
+        HashMap<String, Object> stats = new HashMap<>();
+        
+        List<Seguro> todosSeguros = seguroRepository.findAll();
+        long activos = todosSeguros.stream()
+            .filter(s -> "Activo".equals(s.getEstado()) || "Vigente".equals(s.getEstado()))
+            .count();
+        long vencidos = todosSeguros.stream()
+            .filter(s -> "Vencido".equals(s.getEstado()))
+            .count();
+        double montoTotal = todosSeguros.stream()
+            .mapToDouble(s -> s.getMontoAsegurado() != null ? s.getMontoAsegurado() : 0.0)
+            .sum();
+        
+        stats.put("totalSeguros", todosSeguros.size());
+        stats.put("segurosActivos", activos);
+        stats.put("segurosVencidos", vencidos);
+        stats.put("montoTotalAsegurado", montoTotal);
+        
         return stats;
     }
 }

@@ -1,10 +1,11 @@
 package com.app.financiera.entity;
 
-import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter

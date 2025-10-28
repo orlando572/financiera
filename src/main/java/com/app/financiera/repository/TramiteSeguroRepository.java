@@ -3,6 +3,7 @@ package com.app.financiera.repository;
 import com.app.financiera.entity.TramiteSeguro;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
 import java.util.List;
 
 public interface TramiteSeguroRepository extends JpaRepository<TramiteSeguro, Integer> {

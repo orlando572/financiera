@@ -1,11 +1,11 @@
 package com.app.financiera.service;
 
+import com.app.financiera.entity.CompaniaSeguro;
 import com.app.financiera.entity.Seguro;
 import com.app.financiera.entity.TipoSeguro;
-import com.app.financiera.entity.CompaniaSeguro;
+import com.app.financiera.repository.CompaniaSeguroRepository;
 import com.app.financiera.repository.SeguroRepository;
 import com.app.financiera.repository.TipoSeguroRepository;
-import com.app.financiera.repository.CompaniaSeguroRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

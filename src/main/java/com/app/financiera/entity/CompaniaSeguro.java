@@ -2,10 +2,10 @@ package com.app.financiera.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Getter
 @Setter
@@ -20,7 +20,7 @@ public class CompaniaSeguro {
 
     @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_institucion")
+    @JoinColumn(name = "id_institucion", nullable = true)
     private Institucion institucion;
 
     private String nombre;
@@ -28,8 +28,8 @@ public class CompaniaSeguro {
     @Column(name = "codigo_sbs")
     private String codigoSbs;
 
-    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "tipos_seguro_ofrecidos", columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
     private String tiposSeguroOfrecidos;
 
     @Column(name = "calificacion_riesgo")

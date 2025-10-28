@@ -1,12 +1,11 @@
 package com.app.financiera.entity;
 
-import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -44,7 +43,6 @@ public class TramiteSeguro {
 
     private String respuesta;
 
-    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "documentos_adjuntos", columnDefinition = "jsonb")
     private String documentosAdjuntos;
 

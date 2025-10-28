@@ -1,10 +1,10 @@
 package com.app.financiera.service;
 
 import com.app.financiera.dto.PerfilUsuarioDTO;
-import com.app.financiera.entity.Usuario;
 import com.app.financiera.entity.Afp;
-import com.app.financiera.repository.UsuarioRepository;
+import com.app.financiera.entity.Usuario;
 import com.app.financiera.repository.AfpRepository;
+import com.app.financiera.repository.UsuarioRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

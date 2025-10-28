@@ -1,10 +1,11 @@
 package com.app.financiera.entity;
 
-import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -33,6 +34,6 @@ public class HistorialConsultas {
 
     private String resultado; // "Exitoso", "Error"
 
-    @Column(name = "detalles_adicionales", columnDefinition = "JSON")
+    @Column(name = "detalles_adicionales", columnDefinition = "TEXT")
     private String detallesAdicionales; // JSON con información adicional
 }

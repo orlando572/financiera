@@ -1,8 +1,8 @@
 package com.app.financiera.controller;
 
+import com.app.financiera.entity.CompaniaSeguro;
 import com.app.financiera.entity.Seguro;
 import com.app.financiera.entity.TipoSeguro;
-import com.app.financiera.entity.CompaniaSeguro;
 import com.app.financiera.service.ComparadorService;
 import com.app.financiera.util.AppSettings;
 import org.slf4j.Logger;
