@@ -7,6 +7,11 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+/**
+ * Entidad que representa a una compañía de seguros dentro del sistema financiero.
+ * Contiene información sobre la institución asociada, los tipos de seguros que ofrece,
+ * su calificación de riesgo y datos de contacto.
+ */
 @Getter
 @Setter
 @Entity

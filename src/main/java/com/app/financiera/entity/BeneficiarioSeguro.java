@@ -7,6 +7,11 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
+/**
+ * Entidad que representa a un beneficiario asociado a un seguro dentro del sistema financiero.
+ * Contiene los datos personales, el vínculo con el asegurado, el porcentaje de participación,
+ * y su estado actual en relación al seguro.
+ */
 @Getter
 @Setter
 @Entity

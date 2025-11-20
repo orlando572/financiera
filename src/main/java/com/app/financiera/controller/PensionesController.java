@@ -16,6 +16,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controlador REST que gestiona las operaciones relacionadas con las pensiones,
+ * incluyendo aportes, saldos, proyecciones, estado y registro de consultas o historial.
+ */
 @RestController
 @RequestMapping("/api/pensiones")
 @CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
@@ -26,7 +30,12 @@ public class PensionesController {
     @Autowired
     private PensionesService pensionesService;
 
-    // Resumen General
+    /**
+     * Obtiene el resumen general de pensiones del usuario.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return resumen con los datos consolidados de aportes, saldos y estado de pensiones
+     */
     @GetMapping("/resumen/{idUsuario}")
     public ResponseEntity<?> obtenerResumen(@PathVariable int idUsuario) {
         logger.info("Solicitando resumen de pensiones para usuario: {}", idUsuario);
@@ -42,7 +51,12 @@ public class PensionesController {
         }
     }
 
-    // APORTES - Obtener todos
+    /**
+     * Obtiene la lista completa de aportes del usuario.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return lista de aportes realizados por el usuario
+     */
     @GetMapping("/aportes/{idUsuario}")
     public ResponseEntity<?> obtenerAportes(@PathVariable int idUsuario) {
         logger.info("Solicitando aportes para usuario: {}", idUsuario);
@@ -55,7 +69,12 @@ public class PensionesController {
         }
     }
 
-    // APORTES - Obtener ONP
+    /**
+     * Obtiene los aportes del sistema ONP para un usuario específico.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return lista de aportes asociados al sistema ONP
+     */
     @GetMapping("/aportes/{idUsuario}/onp")
     public ResponseEntity<?> obtenerAportesONP(@PathVariable int idUsuario) {
         try {
@@ -66,7 +85,12 @@ public class PensionesController {
         }
     }
 
-    // APORTES - Obtener AFP
+    /**
+     * Obtiene los aportes del sistema AFP para un usuario específico.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return lista de aportes asociados al sistema AFP
+     */
     @GetMapping("/aportes/{idUsuario}/afp")
     public ResponseEntity<?> obtenerAportesAFP(@PathVariable int idUsuario) {
         try {
@@ -77,7 +101,12 @@ public class PensionesController {
         }
     }
 
-    // APORTES - Crear
+    /**
+     * Registra un nuevo aporte de pensión para el usuario.
+     *
+     * @param aporte objeto con los datos del aporte a registrar
+     * @return mensaje de confirmación y datos del aporte registrado
+     */
     @PostMapping("/aportes")
     public ResponseEntity<?> crearAporte(@RequestBody AportePension aporte) {
         logger.info("Creando nuevo aporte para usuario: {}", aporte.getUsuario().getIdUsuario());
@@ -90,7 +119,13 @@ public class PensionesController {
         }
     }
 
-    // APORTES - Actualizar
+    /**
+     * Actualiza un aporte existente del usuario.
+     *
+     * @param idAporte identificador del aporte a actualizar
+     * @param aporte objeto con los nuevos datos del aporte
+     * @return mensaje de confirmación y datos del aporte actualizado
+     */
     @PutMapping("/aportes/{idAporte}")
     public ResponseEntity<?> actualizarAporte(@PathVariable int idAporte, @RequestBody AportePension aporte) {
         logger.info("Actualizando aporte: {}", idAporte);
@@ -104,7 +139,12 @@ public class PensionesController {
         }
     }
 
-    // APORTES - Eliminar
+    /**
+     * Elimina un aporte de pensión según su identificador.
+     *
+     * @param idAporte identificador del aporte a eliminar
+     * @return mensaje de confirmación de eliminación del aporte
+     */
     @DeleteMapping("/aportes/{idAporte}")
     public ResponseEntity<?> eliminarAporte(@PathVariable int idAporte) {
         logger.info("Eliminando aporte: {}", idAporte);
@@ -117,7 +157,12 @@ public class PensionesController {
         }
     }
 
-    // SALDOS - Obtener todos
+    /**
+     * Obtiene los saldos registrados del usuario.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return lista de saldos del sistema de pensiones
+     */
     @GetMapping("/saldos/{idUsuario}")
     public ResponseEntity<?> obtenerSaldos(@PathVariable int idUsuario) {
         logger.info("Solicitando saldos para usuario: {}", idUsuario);
@@ -130,7 +175,12 @@ public class PensionesController {
         }
     }
 
-    // SALDOS - Total
+    /**
+     * Obtiene el saldo total acumulado en las cuentas de pensión del usuario.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return monto total de los saldos del usuario
+     */
     @GetMapping("/saldos/{idUsuario}/total")
     public ResponseEntity<?> obtenerSaldoTotal(@PathVariable int idUsuario) {
         try {
@@ -141,7 +191,12 @@ public class PensionesController {
         }
     }
 
-    // SALDOS - Disponible
+    /**
+     * Obtiene el saldo disponible actual para el usuario.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return monto del saldo disponible
+     */
     @GetMapping("/saldos/{idUsuario}/disponible")
     public ResponseEntity<?> obtenerSaldoDisponible(@PathVariable int idUsuario) {
         try {
@@ -152,7 +207,12 @@ public class PensionesController {
         }
     }
 
-    // PROYECCIONES
+    /**
+     * Obtiene las proyecciones de pensión para el usuario según sus aportes y estado actual.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return mapa con los datos proyectados de pensión futura
+     */
     @GetMapping("/proyecciones/{idUsuario}")
     public ResponseEntity<?> obtenerProyecciones(@PathVariable int idUsuario) {
         logger.info("Solicitando proyecciones para usuario: {}", idUsuario);
@@ -165,7 +225,13 @@ public class PensionesController {
         }
     }
 
-    // ESTADO
+    /**
+     * Obtiene el estado actual del sistema de pensiones del usuario,
+     * incluyendo información de AFP, ONP y años aportados.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return mapa con el estado del usuario en los distintos sistemas
+     */
     @GetMapping("/estado/{idUsuario}")
     public ResponseEntity<?> obtenerEstado(@PathVariable int idUsuario) {
         logger.info("Solicitando estado de pensiones para usuario: {}", idUsuario);
@@ -182,7 +248,12 @@ public class PensionesController {
         }
     }
 
-    // CONSULTAS - Registrar
+    /**
+     * Registra una nueva consulta de aportes realizada por el usuario.
+     *
+     * @param consulta objeto que contiene los datos de la consulta
+     * @return consulta registrada con los datos almacenados
+     */
     @PostMapping("/consultas")
     public ResponseEntity<?> registrarConsulta(@RequestBody ConsultaAportes consulta) {
         logger.info("Registrando consulta para usuario: {}", consulta.getUsuario().getIdUsuario());
@@ -195,7 +266,12 @@ public class PensionesController {
         }
     }
 
-    // CONSULTAS - Obtener
+    /**
+     * Obtiene todas las consultas registradas para un usuario.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return lista de consultas realizadas por el usuario
+     */
     @GetMapping("/consultas/{idUsuario}")
     public ResponseEntity<?> obtenerConsultas(@PathVariable int idUsuario) {
         try {
@@ -206,7 +282,12 @@ public class PensionesController {
         }
     }
 
-    // HISTORIAL - Registrar
+    /**
+     * Registra una nueva entrada en el historial de consultas del usuario.
+     *
+     * @param historial objeto con la información del historial a registrar
+     * @return historial registrado con los datos almacenados
+     */
     @PostMapping("/historial")
     public ResponseEntity<?> registrarHistorial(@RequestBody HistorialConsultas historial) {
         logger.info("Registrando historial para usuario: {}", historial.getUsuario().getIdUsuario());
@@ -219,7 +300,12 @@ public class PensionesController {
         }
     }
 
-    // HISTORIAL - Obtener
+    /**
+     * Obtiene el historial completo de consultas realizadas por un usuario.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return lista de registros del historial de consultas
+     */
     @GetMapping("/historial/{idUsuario}")
     public ResponseEntity<?> obtenerHistorial(@PathVariable int idUsuario) {
         try {

@@ -7,6 +7,11 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entidad que representa un pago asociado a un seguro dentro del sistema financiero.
+ * Contiene información sobre el seguro correspondiente, número de cuota, monto pagado,
+ * fechas de pago y vencimiento, monto de la cuota, método de pago, estado y observaciones.
+ */
 @Getter
 @Setter
 @Entity

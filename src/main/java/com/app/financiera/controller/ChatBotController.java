@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
+/**
+ * Controlador REST para la gestión de interacciones con el chatbot.
+ * Permite procesar mensajes de usuarios y enviar solicitudes para contactar con un asesor humano.
+ */
 @RestController
 @RequestMapping("/api/chatbot")
 @CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
@@ -20,6 +24,13 @@ public class ChatBotController {
     @Autowired
     private ChatBotService chatBotService;
 
+    /**
+     * Procesa el mensaje enviado por el usuario al chatbot.
+     * Valida el contenido del mensaje y delega el procesamiento a {@link ChatBotService}.
+     *
+     * @param request mapa con los datos de la solicitud, incluyendo el mensaje y el ID del usuario
+     * @return una respuesta HTTP que contiene el mensaje de respuesta del chatbot o un mensaje de error en caso de fallo
+     */
     @PostMapping("/mensaje")
     public ResponseEntity<?> procesarMensaje(@RequestBody HashMap<String, Object> request) {
         HashMap<String, Object> respuesta = new HashMap<>();
@@ -51,6 +62,13 @@ public class ChatBotController {
         }
     }
 
+    /**
+     * Registra una solicitud para que un asesor humano contacte al usuario.
+     * Utiliza el servicio {@link ChatBotService} para gestionar el envío o registro de la solicitud.
+     *
+     * @param request mapa con los datos del usuario y el motivo de la solicitud
+     * @return una respuesta HTTP que indica si la solicitud fue procesada correctamente o si ocurrió un error
+     */
     @PostMapping("/solicitar-asesor")
     public ResponseEntity<?> solicitarAsesor(@RequestBody HashMap<String, Object> request) {
         HashMap<String, Object> respuesta = new HashMap<>();

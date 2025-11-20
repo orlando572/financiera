@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Controlador REST para la gestión de planes de seguro.
+ * Proporciona endpoints para listar, registrar, actualizar, eliminar,
+ * cambiar estado y obtener estadísticas de los planes registrados.
+ */
 @RestController
 @RequestMapping("/api/admin/planes-seguro")
 @CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
@@ -22,7 +27,14 @@ public class AdminPlanesSeguroController {
     @Autowired
     private AdminPlanesSeguroService service;
 
-    // Listar todos los planes de seguro con filtros
+    /**
+     * Obtiene la lista de planes de seguro según la categoría y el estado especificados.
+     * Si no se indica ningún filtro, devuelve todos los planes registrados.
+     *
+     * @param categoria categoría opcional para filtrar los planes (por ejemplo, Vida, Salud, etc.)
+     * @param estado estado opcional para filtrar los planes (por ejemplo, Activo o Inactivo)
+     * @return una respuesta HTTP con la lista de planes o un mensaje de error en caso de fallo
+     */
     @GetMapping
     public ResponseEntity<?> listarPlanes(
             @RequestParam(required = false) String categoria,
@@ -37,7 +49,12 @@ public class AdminPlanesSeguroController {
         }
     }
 
-    // Obtener un plan por ID
+    /**
+     * Recupera un plan de seguro específico a partir de su identificador único.
+     *
+     * @param id identificador numérico del plan de seguro a consultar
+     * @return una respuesta HTTP con los datos del plan o un mensaje de error si no se encuentra
+     */
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerPlanPorId(@PathVariable int id) {
         logger.info("Obteniendo plan de seguro con ID: {}", id);
@@ -54,7 +71,12 @@ public class AdminPlanesSeguroController {
         }
     }
 
-    // Crear un nuevo plan de seguro
+    /**
+     * Registra un nuevo plan de seguro en el sistema.
+     *
+     * @param plan objeto con los datos del plan de seguro a crear
+     * @return una respuesta HTTP con el plan creado o un mensaje de error si ocurre un problema
+     */
     @PostMapping
     public ResponseEntity<?> crearPlan(@RequestBody TipoSeguro plan) {
         logger.info("Creando nuevo plan de seguro: {}", plan.getNombre());
@@ -75,7 +97,13 @@ public class AdminPlanesSeguroController {
         }
     }
 
-    // Actualizar un plan de seguro
+    /**
+     * Actualiza los datos de un plan de seguro existente.
+     *
+     * @param id identificador numérico del plan de seguro a actualizar
+     * @param plan objeto con los nuevos datos del plan
+     * @return una respuesta HTTP con el plan actualizado o un mensaje de error si ocurre un fallo
+     */
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizarPlan(@PathVariable int id, @RequestBody TipoSeguro plan) {
         logger.info("Actualizando plan de seguro con ID: {}", id);
@@ -97,7 +125,12 @@ public class AdminPlanesSeguroController {
         }
     }
 
-    // Eliminar un plan de seguro
+    /**
+     * Elimina un plan de seguro del sistema.
+     *
+     * @param id identificador numérico del plan de seguro a eliminar
+     * @return una respuesta HTTP con un mensaje indicando el resultado de la operación
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarPlan(@PathVariable int id) {
         logger.info("Eliminando plan de seguro con ID: {}", id);
@@ -117,7 +150,13 @@ public class AdminPlanesSeguroController {
         }
     }
 
-    // Cambiar estado de un plan
+    /**
+     * Cambia el estado actual de un plan de seguro (por ejemplo, de Activo a Inactivo o viceversa).
+     *
+     * @param id identificador numérico del plan de seguro a modificar
+     * @param estado nuevo estado que se desea asignar al plan
+     * @return una respuesta HTTP con el resultado de la operación
+     */
     @PatchMapping("/{id}/estado")
     public ResponseEntity<?> cambiarEstado(@PathVariable int id, @RequestParam String estado) {
         logger.info("Cambiando estado del plan {} a: {}", id, estado);
@@ -133,7 +172,11 @@ public class AdminPlanesSeguroController {
         }
     }
 
-    // Obtener estadísticas de planes
+    /**
+     * Obtiene estadísticas generales sobre los planes de seguro registrados.
+     *
+     * @return una respuesta HTTP con un mapa de estadísticas o un mensaje de error si ocurre una excepción
+     */
     @GetMapping("/estadisticas")
     public ResponseEntity<?> obtenerEstadisticas() {
         logger.info("Obteniendo estadísticas de planes de seguro");

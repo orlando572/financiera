@@ -7,6 +7,12 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entidad que representa una notificación dentro del sistema financiero.
+ * Contiene información sobre el usuario destinatario, tipo de notificación, mensaje,
+ * fechas de envío y lectura, canal de envío, prioridad, estado, asunto, URL de acción
+ * y datos adicionales en formato JSON.
+ */
 @Getter
 @Setter
 @Entity

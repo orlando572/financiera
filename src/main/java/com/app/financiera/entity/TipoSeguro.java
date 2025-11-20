@@ -4,6 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Entidad que representa un tipo de seguro dentro del sistema financiero.
+ * Contiene información sobre el nombre, descripción, categoría del seguro,
+ * cobertura principal y estado de disponibilidad.
+ */
 @Getter
 @Setter
 @Entity

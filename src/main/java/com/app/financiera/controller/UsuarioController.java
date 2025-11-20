@@ -15,10 +15,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Controlador REST que gestiona las operaciones relacionadas con los usuarios,
+ * incluyendo registro, autenticación, búsqueda y obtención de roles o AFPs.
+ */
 @RestController
 @RequestMapping("/api/usuario")
 @CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
@@ -38,18 +41,33 @@ public class UsuarioController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    /**
+     * Obtiene la lista de roles de usuario disponibles en el sistema.
+     *
+     * @return lista de objetos {@link RolUsuario}
+     */
     @GetMapping("/roles")
     @ResponseBody
     public List<RolUsuario> listarRoles() {
         return rolUsuarioService.listarRoles();
     }
 
+    /**
+     * Obtiene la lista de AFPs registradas en el sistema.
+     *
+     * @return lista de objetos {@link Afp}
+     */
     @GetMapping("/afps")
     @ResponseBody
     public List<Afp> listarAfps() {
         return afpService.listarAfps();
     }
 
+    /**
+     * Obtiene la lista de AFPs registradas en el sistema.
+     *
+     * @return lista de objetos {@link Afp}
+     */
     @PostMapping("/registrarUsuario")
     @ResponseBody
     public ResponseEntity<?> registra(@RequestBody Usuario obj) {
@@ -75,6 +93,13 @@ public class UsuarioController {
         }
     }
 
+    /**
+     * Inicia sesión para un usuario existente validando su DNI y clave SOL.
+     * Genera y retorna un token JWT en caso de autenticación exitosa.
+     *
+     * @param loginRequest objeto {@link LoginRequest} con las credenciales del usuario
+     * @return respuesta HTTP con token JWT y datos del usuario, o mensaje de error
+     */
     @PostMapping("/login")
     @ResponseBody
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
@@ -120,6 +145,12 @@ public class UsuarioController {
         }
     }
 
+    /**
+     * Busca un usuario por su identificador único.
+     *
+     * @param id identificador del usuario
+     * @return respuesta HTTP con el usuario encontrado o mensaje de error
+     */
     @GetMapping("/buscarPorId/{id}")
     @ResponseBody
     public ResponseEntity<?> buscarUsuarioPorId(@PathVariable Integer id) {
@@ -132,6 +163,11 @@ public class UsuarioController {
         }
     }
 
+    /**
+     * Obtiene la lista completa de usuarios registrados.
+     *
+     * @return respuesta HTTP con la lista de usuarios o error del servidor
+     */
     @GetMapping
     @ResponseBody
     public ResponseEntity<List<Usuario>> getAllUsuarios() {

@@ -5,6 +5,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Entidad que representa a un administrador dentro del sistema financiero.
+ * Un administrador está vinculado a un usuario base y posee información adicional
+ * relacionada con sus permisos y funciones dentro del sistema.
+ */
 @Getter
 @Setter
 @Entity

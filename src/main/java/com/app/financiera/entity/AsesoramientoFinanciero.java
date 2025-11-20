@@ -7,6 +7,12 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entidad que representa un registro de asesoramiento financiero dentro del sistema.
+ * Cada asesoramiento está asociado a un usuario, un asesor y opcionalmente a un aporte de pensión.
+ * Incluye información sobre el tipo de asesoramiento, canal de atención, fechas, duración,
+ * nivel de satisfacción del cliente, y observaciones relevantes.
+ */
 @Getter
 @Setter
 @Entity

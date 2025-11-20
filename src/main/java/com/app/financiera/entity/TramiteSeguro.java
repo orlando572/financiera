@@ -7,6 +7,11 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entidad que representa un trámite relacionado con un seguro dentro del sistema financiero.
+ * Contiene información sobre el usuario solicitante, el seguro asociado, tipo de trámite,
+ * fechas de solicitud y resolución, estado, prioridad, respuesta y documentos adjuntos.
+ */
 @Getter
 @Setter
 @Entity

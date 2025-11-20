@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Controlador REST para la gestión de compañías de seguro.
+ * Proporciona endpoints para listar, registrar, actualizar, eliminar,
+ * cambiar estado y obtener estadísticas de las compañías registradas.
+ */
 @RestController
 @RequestMapping("/api/admin/companias-seguro")
 @CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
@@ -22,7 +27,13 @@ public class AdminCompaniasSeguroController {
     @Autowired
     private AdminCompaniasSeguroService service;
 
-    // Listar todas las compañías con filtros
+    /**
+     * Obtiene la lista de compañías de seguro según el estado especificado.
+     * Si no se indica un estado, devuelve todas las compañías registradas.
+     *
+     * @param estado estado opcional para filtrar las compañías (por ejemplo, Activo o Inactivo)
+     * @return una respuesta HTTP con la lista de compañías o un mensaje de error en caso de fallo
+     */
     @GetMapping
     public ResponseEntity<?> listarCompanias(@RequestParam(required = false) String estado) {
         logger.info("Listando compañías de seguro - Estado: {}", estado);
@@ -35,7 +46,12 @@ public class AdminCompaniasSeguroController {
         }
     }
 
-    // Obtener una compañía por ID
+    /**
+     * Recupera una compañía de seguro específica a partir de su identificador único.
+     *
+     * @param id identificador numérico de la compañía a consultar
+     * @return una respuesta HTTP con los datos de la compañía o un mensaje de error si no se encuentra
+     */
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerCompaniaPorId(@PathVariable int id) {
         logger.info("Obteniendo compañía de seguro con ID: {}", id);
@@ -52,7 +68,12 @@ public class AdminCompaniasSeguroController {
         }
     }
 
-    // Crear una nueva compañía
+    /**
+     * Registra una nueva compañía de seguro en el sistema.
+     *
+     * @param compania objeto con los datos de la compañía a crear
+     * @return una respuesta HTTP con la compañía registrada o un mensaje de error si ocurre un problema
+     */
     @PostMapping
     public ResponseEntity<?> crearCompania(@RequestBody CompaniaSeguro compania) {
         logger.info("Creando nueva compañía de seguro: {}", compania.getNombre());
@@ -73,7 +94,13 @@ public class AdminCompaniasSeguroController {
         }
     }
 
-    // Actualizar una compañía
+    /**
+     * Actualiza los datos de una compañía de seguro existente.
+     *
+     * @param id identificador numérico de la compañía a actualizar
+     * @param compania objeto con los nuevos datos de la compañía
+     * @return una respuesta HTTP con la compañía actualizada o un mensaje de error si ocurre un fallo
+     */
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizarCompania(@PathVariable int id, @RequestBody CompaniaSeguro compania) {
         logger.info("Actualizando compañía de seguro con ID: {}", id);
@@ -95,7 +122,12 @@ public class AdminCompaniasSeguroController {
         }
     }
 
-    // Eliminar una compañía
+    /**
+     * Elimina una compañía de seguro del sistema.
+     *
+     * @param id identificador numérico de la compañía a eliminar
+     * @return una respuesta HTTP con un mensaje indicando el resultado de la operación
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarCompania(@PathVariable int id) {
         logger.info("Eliminando compañía de seguro con ID: {}", id);
@@ -115,7 +147,13 @@ public class AdminCompaniasSeguroController {
         }
     }
 
-    // Cambiar estado de una compañía
+    /**
+     * Cambia el estado actual de una compañía de seguro (por ejemplo, de Activo a Inactivo o viceversa).
+     *
+     * @param id identificador numérico de la compañía a modificar
+     * @param estado nuevo estado que se desea asignar a la compañía
+     * @return una respuesta HTTP con el resultado de la operación
+     */
     @PatchMapping("/{id}/estado")
     public ResponseEntity<?> cambiarEstado(@PathVariable int id, @RequestParam String estado) {
         logger.info("Cambiando estado de la compañía {} a: {}", id, estado);
@@ -131,7 +169,11 @@ public class AdminCompaniasSeguroController {
         }
     }
 
-    // Obtener estadísticas de compañías
+    /**
+     * Obtiene estadísticas generales sobre las compañías de seguro registradas.
+     *
+     * @return una respuesta HTTP con un mapa de estadísticas o un mensaje de error si ocurre una excepción
+     */
     @GetMapping("/estadisticas")
     public ResponseEntity<?> obtenerEstadisticas() {
         logger.info("Obteniendo estadísticas de compañías de seguro");

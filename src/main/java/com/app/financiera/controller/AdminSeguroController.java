@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Controlador REST para la gestión de seguros.
+ * Permite listar, crear, actualizar, eliminar seguros y gestionar sus beneficiarios.
+ * También ofrece estadísticas generales sobre los seguros registrados.
+ */
 @RestController
 @RequestMapping("/api/admin/seguros")
 @CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
@@ -23,6 +28,14 @@ public class AdminSeguroController {
     @Autowired
     private SegurosService segurosService;
 
+    /**
+     * Obtiene la lista de seguros registrados, con filtros opcionales por búsqueda y estado.
+     * Si no se indican filtros, devuelve todos los seguros existentes.
+     *
+     * @param busqueda texto opcional para filtrar por número de póliza, nombre, apellido o DNI del usuario
+     * @param estado estado opcional para filtrar seguros (por ejemplo, Activo o Inactivo)
+     * @return una respuesta HTTP con la lista de seguros filtrada o un mensaje de error en caso de fallo
+     */
     @GetMapping
     public ResponseEntity<?> listarTodosSeguros(
             @RequestParam(required = false) String busqueda,
@@ -61,6 +74,12 @@ public class AdminSeguroController {
         }
     }
 
+    /**
+     * Recupera la información detallada de un seguro específico a partir de su identificador único.
+     *
+     * @param id identificador numérico del seguro a consultar
+     * @return una respuesta HTTP con los datos del seguro o un mensaje de error si no se encuentra
+     */
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerSeguroPorId(@PathVariable int id) {
         try {
@@ -78,6 +97,13 @@ public class AdminSeguroController {
         }
     }
 
+    /**
+     * Obtiene estadísticas generales de los seguros registrados.
+     * Las estadísticas incluyen métricas globales como cantidad total de seguros,
+     * distribución por estado u otros indicadores definidos en el servicio.
+     *
+     * @return una respuesta HTTP con los datos estadísticos o un mensaje de error si ocurre una falla
+     */
     @GetMapping("/estadisticas")
     public ResponseEntity<?> obtenerEstadisticas() {
         try {
@@ -90,6 +116,13 @@ public class AdminSeguroController {
         }
     }
 
+    /**
+     * Registra un nuevo seguro en el sistema con los datos proporcionados.
+     *
+     * @param seguro objeto {@link Seguro} con la información del nuevo seguro
+     * @return una respuesta HTTP con el mensaje de éxito y los datos del seguro creado,
+     *         o un mensaje de error en caso de fallo
+     */
     @PostMapping
     public ResponseEntity<?> crearSeguro(@RequestBody Seguro seguro) {
         try {
@@ -112,6 +145,13 @@ public class AdminSeguroController {
         }
     }
 
+    /**
+     * Actualiza los datos de un seguro existente identificado por su ID.
+     *
+     * @param id identificador del seguro a actualizar
+     * @param seguro objeto {@link Seguro} con los nuevos valores a registrar
+     * @return una respuesta HTTP con el seguro actualizado o un mensaje de error si ocurre una falla
+     */
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizarSeguro(
             @PathVariable int id,
@@ -136,6 +176,12 @@ public class AdminSeguroController {
         }
     }
 
+    /**
+     * Elimina un seguro del sistema de acuerdo con su identificador.
+     *
+     * @param id identificador del seguro a eliminar
+     * @return una respuesta HTTP con un mensaje de confirmación o un error si la eliminación falla
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarSeguro(@PathVariable int id) {
         try {
@@ -156,6 +202,12 @@ public class AdminSeguroController {
         }
     }
 
+    /**
+     * Obtiene la lista de beneficiarios asociados a un seguro específico.
+     *
+     * @param id identificador del seguro del cual se desean consultar los beneficiarios
+     * @return una respuesta HTTP con la lista de beneficiarios o un mensaje de error en caso de fallo
+     */
     @GetMapping("/{id}/beneficiarios")
     public ResponseEntity<?> obtenerBeneficiarios(@PathVariable int id) {
         try {
@@ -168,6 +220,13 @@ public class AdminSeguroController {
         }
     }
 
+    /**
+     * Cambia el estado actual de un seguro (por ejemplo, de Activo a Inactivo).
+     *
+     * @param id identificador del seguro cuyo estado se desea modificar
+     * @param nuevoEstado nuevo valor del estado a asignar al seguro
+     * @return una respuesta HTTP con el seguro actualizado o un mensaje de error si ocurre un problema
+     */
     @PutMapping("/{id}/estado")
     public ResponseEntity<?> cambiarEstado(
             @PathVariable int id,

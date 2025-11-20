@@ -7,6 +7,12 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
+/**
+ * Entidad que representa un registro de aporte previsional
+ * realizado por un usuario a una institución financiera.
+ * Contiene información detallada sobre los montos, fechas,
+ * tipo de fondo, empleador y estado del aporte.
+ */
 @Getter
 @Setter
 @Entity

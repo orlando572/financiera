@@ -7,6 +7,11 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entidad que representa el historial de rentabilidad de un fondo de pensiones en un periodo específico.
+ * Incluye información sobre la AFP, el tipo de fondo, rentabilidad nominal y real, patrimonio del fondo,
+ * número de afiliados y fecha de registro de la información.
+ */
 @Getter
 @Setter
 @Entity
