@@ -278,7 +278,7 @@ public class ChatBotServiceImpl implements ChatBotService {
                         motivo != null ? motivo : "No especificado"
                 );
 
-                emailService.enviarCorreoSimple("soporte@sumaqseguros.com", asunto, mensaje);
+                emailService.enviarCorreoSimple("orlandorakio572@gmail.com", asunto, mensaje);
 
                 // Notificar al usuario
                 if (usuario.isNotificacionesEmail()) {

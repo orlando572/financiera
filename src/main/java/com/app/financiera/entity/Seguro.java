@@ -7,6 +7,13 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+/**
+ * Entidad que representa un seguro contratado por un usuario.
+ * Contiene información sobre el tipo de seguro, la compañía aseguradora,
+ * detalles del contrato como número de póliza y contrato, fechas de inicio y vencimiento,
+ * montos asegurados, primas, deducibles, beneficiarios, coberturas, exclusiones,
+ * métodos y formas de pago, fecha de registro y estado del seguro.
+ */
 @Getter
 @Setter
 @Entity

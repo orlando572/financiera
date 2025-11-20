@@ -12,6 +12,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controlador REST para la gestión de solicitudes de cotización de seguros.
+ * Permite a los usuarios enviar solicitudes de cotización de uno o varios planes
+ * y verificar el estado del servicio.
+ */
 @RestController
 @RequestMapping("/api/cotizacion")
 @CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
@@ -22,6 +27,12 @@ public class CotizacionController {
     @Autowired
     private CotizacionService cotizacionService;
 
+    /**
+     * Procesa una solicitud de cotización enviada por el usuario.
+     * Valida los datos requeridos y delega el procesamiento a {@link CotizacionService}.
+     * @param request mapa que contiene el ID del usuario, la lista de IDs de los planes y comentarios opcionales
+     * @return una respuesta HTTP con el resultado de la solicitud o un mensaje de error en caso de fallo
+     */
     @PostMapping("/solicitar")
     public ResponseEntity<?> solicitarCotizacion(@RequestBody Map<String, Object> request) {
         logger.info("Solicitud de cotización recibida");
@@ -74,6 +85,11 @@ public class CotizacionController {
         }
     }
 
+    /**
+     * Verifica el estado de salud del servicio de cotización.
+     *
+     * @return una respuesta HTTP con la información del estado del servicio y su versión actual
+     */
     @GetMapping("/health")
     public ResponseEntity<?> healthCheck() {
         HashMap<String, Object> health = new HashMap<>();

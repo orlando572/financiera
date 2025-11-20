@@ -15,6 +15,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Controlador REST para la gestión integral de seguros.
+ * Permite administrar pólizas, beneficiarios, pagos y trámites,
+ * así como obtener resúmenes y estadísticas relacionadas con los seguros del usuario.
+ */
 @RestController
 @RequestMapping("/api/seguros")
 @CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
@@ -25,6 +30,12 @@ public class SegurosController {
     @Autowired
     private SegurosService segurosService;
 
+    /**
+     * Obtiene un resumen administrativo de los seguros del usuario especificado.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return resumen de información general de los seguros del usuario
+     */
     @GetMapping("/resumen/{idUsuario}")
     public ResponseEntity<?> obtenerResumen(@PathVariable int idUsuario) {
         logger.info("Solicitud de resumen de seguros para usuario: {}", idUsuario);
@@ -40,6 +51,12 @@ public class SegurosController {
         }
     }
 
+    /**
+     * Obtiene todas las pólizas registradas para un usuario.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return lista de pólizas asociadas al usuario
+     */
     @GetMapping("/polizas/{idUsuario}")
     public ResponseEntity<?> obtenerPolizas(@PathVariable int idUsuario) {
         logger.info("Solicitud de pólizas para usuario: {}", idUsuario);
@@ -52,7 +69,12 @@ public class SegurosController {
         }
     }
 
-    // Obtener solo seguros activos
+    /**
+     * Obtiene las pólizas activas de un usuario.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return lista de pólizas con estado activo
+     */
     @GetMapping("/polizas/{idUsuario}/activos")
     public ResponseEntity<?> obtenerPolizasActivas(@PathVariable int idUsuario) {
         try {
@@ -63,7 +85,12 @@ public class SegurosController {
         }
     }
 
-    // Obtener seguro por ID
+    /**
+     * Obtiene una póliza específica a partir de su identificador.
+     *
+     * @param idSeguro identificador único de la póliza
+     * @return información detallada de la póliza encontrada o mensaje de error si no existe
+     */
     @GetMapping("/poliza/{idSeguro}")
     public ResponseEntity<?> obtenerPolizaPorId(@PathVariable int idSeguro) {
         try {
@@ -77,7 +104,12 @@ public class SegurosController {
         }
     }
 
-    // Crear nueva póliza
+    /**
+     * Registra una nueva póliza para el usuario correspondiente.
+     *
+     * @param seguro objeto {@link Seguro} con la información de la nueva póliza
+     * @return confirmación de creación junto con los datos de la póliza registrada
+     */
     @PostMapping("/polizas")
     public ResponseEntity<?> crearPoliza(@RequestBody Seguro seguro) {
         logger.info("Creando nueva póliza para usuario: {}", seguro.getUsuario().getIdUsuario());
@@ -96,7 +128,13 @@ public class SegurosController {
         }
     }
 
-    // Actualizar póliza
+    /**
+     * Actualiza la información de una póliza existente.
+     *
+     * @param idSeguro identificador único de la póliza
+     * @param seguro objeto {@link Seguro} con los datos actualizados
+     * @return confirmación de actualización junto con los datos modificados
+     */
     @PutMapping("/polizas/{idSeguro}")
     public ResponseEntity<?> actualizarPoliza(
             @PathVariable int idSeguro,
@@ -115,7 +153,12 @@ public class SegurosController {
         }
     }
 
-    // Cancelar póliza
+    /**
+     * Cancela una póliza existente a partir de su identificador.
+     *
+     * @param idSeguro identificador único de la póliza
+     * @return mensaje de confirmación de cancelación
+     */
     @DeleteMapping("/polizas/{idSeguro}")
     public ResponseEntity<?> cancelarPoliza(@PathVariable int idSeguro) {
         logger.info("Cancelando póliza ID: {}", idSeguro);
@@ -130,7 +173,13 @@ public class SegurosController {
         }
     }
 
-    // Obtener seguros próximos a vencer
+    /**
+     * Obtiene las pólizas del usuario que están próximas a vencer.
+     *
+     * @param idUsuario identificador único del usuario
+     * @param dias número de días de margen para considerar una póliza próxima a vencer
+     * @return lista de pólizas próximas a vencer
+     */
     @GetMapping("/polizas/{idUsuario}/proximos-vencer")
     public ResponseEntity<?> obtenerProximosVencer(
             @PathVariable int idUsuario,
@@ -143,7 +192,12 @@ public class SegurosController {
         }
     }
 
-    // Obtener beneficiarios de un seguro
+    /**
+     * Obtiene los beneficiarios asociados a una póliza específica.
+     *
+     * @param idSeguro identificador único de la póliza
+     * @return lista de beneficiarios asociados
+     */
     @GetMapping("/beneficiarios/{idSeguro}")
     public ResponseEntity<?> obtenerBeneficiarios(@PathVariable int idSeguro) {
         logger.info("Solicitud de beneficiarios para seguro: {}", idSeguro);
@@ -156,7 +210,12 @@ public class SegurosController {
         }
     }
 
-    // Agregar beneficiario
+    /**
+     * Agrega un nuevo beneficiario a una póliza existente.
+     *
+     * @param beneficiario objeto {@link BeneficiarioSeguro} con la información del beneficiario
+     * @return confirmación de creación junto con los datos del beneficiario registrado
+     */
     @PostMapping("/beneficiarios")
     public ResponseEntity<?> agregarBeneficiario(@RequestBody BeneficiarioSeguro beneficiario) {
         logger.info("Agregando beneficiario para seguro: {}", beneficiario.getSeguro().getIdSeguro());
@@ -175,7 +234,13 @@ public class SegurosController {
         }
     }
 
-    // Actualizar beneficiario
+    /**
+     * Actualiza los datos de un beneficiario existente.
+     *
+     * @param idBeneficiario identificador único del beneficiario
+     * @param beneficiario objeto {@link BeneficiarioSeguro} con los datos actualizados
+     * @return confirmación de actualización junto con los datos modificados
+     */
     @PutMapping("/beneficiarios/{idBeneficiario}")
     public ResponseEntity<?> actualizarBeneficiario(
             @PathVariable int idBeneficiario,
@@ -192,7 +257,12 @@ public class SegurosController {
         }
     }
 
-    // Eliminar beneficiario
+    /**
+     * Elimina un beneficiario asociado a una póliza.
+     *
+     * @param idBeneficiario identificador único del beneficiario
+     * @return mensaje de confirmación de eliminación
+     */
     @DeleteMapping("/beneficiarios/{idBeneficiario}")
     public ResponseEntity<?> eliminarBeneficiario(@PathVariable int idBeneficiario) {
         try {
@@ -205,7 +275,12 @@ public class SegurosController {
         }
     }
 
-    // Obtener pagos de un seguro
+    /**
+     * Obtiene todos los pagos realizados para una póliza.
+     *
+     * @param idSeguro identificador único de la póliza
+     * @return lista de pagos registrados para el seguro
+     */
     @GetMapping("/pagos/{idSeguro}")
     public ResponseEntity<?> obtenerPagos(@PathVariable int idSeguro) {
         try {
@@ -216,7 +291,12 @@ public class SegurosController {
         }
     }
 
-    // Obtener pagos pendientes del usuario
+    /**
+     * Obtiene los pagos pendientes de un usuario junto con el monto total adeudado.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return lista de pagos pendientes y el total pendiente
+     */
     @GetMapping("/pagos/{idUsuario}/pendientes")
     public ResponseEntity<?> obtenerPagosPendientes(@PathVariable int idUsuario) {
         logger.info("Solicitud de pagos pendientes para usuario: {}", idUsuario);
@@ -235,7 +315,12 @@ public class SegurosController {
         }
     }
 
-    // Registrar pago
+    /**
+     * Registra un nuevo pago asociado a una póliza.
+     *
+     * @param pago objeto {@link PagoSeguro} con la información del pago
+     * @return confirmación de registro junto con los datos del pago
+     */
     @PostMapping("/pagos")
     public ResponseEntity<?> registrarPago(@RequestBody PagoSeguro pago) {
         logger.info("Registrando pago para seguro: {}", pago.getSeguro().getIdSeguro());
@@ -251,7 +336,12 @@ public class SegurosController {
         }
     }
 
-    // Obtener trámites del usuario
+    /**
+     * Obtiene los trámites registrados por un usuario.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return lista de trámites asociados al usuario
+     */
     @GetMapping("/tramites/{idUsuario}")
     public ResponseEntity<?> obtenerTramites(@PathVariable int idUsuario) {
         logger.info("Solicitud de trámites para usuario: {}", idUsuario);
@@ -264,7 +354,12 @@ public class SegurosController {
         }
     }
 
-    // Obtener trámites pendientes
+    /**
+     * Obtiene los trámites pendientes de un usuario.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return lista de trámites en estado pendiente
+     */
     @GetMapping("/tramites/{idUsuario}/pendientes")
     public ResponseEntity<?> obtenerTramitesPendientes(@PathVariable int idUsuario) {
         try {
@@ -275,7 +370,12 @@ public class SegurosController {
         }
     }
 
-    // Crear trámite
+    /**
+     * Registra un nuevo trámite para un usuario.
+     *
+     * @param tramite objeto {@link TramiteSeguro} con la información del trámite
+     * @return confirmación de creación junto con los datos registrados
+     */
     @PostMapping("/tramites")
     public ResponseEntity<?> crearTramite(@RequestBody TramiteSeguro tramite) {
         logger.info("Creando trámite para usuario: {}", tramite.getUsuario().getIdUsuario());
@@ -291,7 +391,13 @@ public class SegurosController {
         }
     }
 
-    // Actualizar trámite
+    /**
+     * Actualiza la información de un trámite existente.
+     *
+     * @param idTramite identificador único del trámite
+     * @param tramite objeto {@link TramiteSeguro} con los datos actualizados
+     * @return confirmación de actualización junto con los datos modificados
+     */
     @PutMapping("/tramites/{idTramite}")
     public ResponseEntity<?> actualizarTramite(
             @PathVariable int idTramite,
@@ -310,7 +416,12 @@ public class SegurosController {
         }
     }
 
-    // Eliminar trámite
+    /**
+     * Elimina un trámite existente a partir de su identificador.
+     *
+     * @param idTramite identificador único del trámite
+     * @return mensaje de confirmación de eliminación
+     */
     @DeleteMapping("/tramites/{idTramite}")
     public ResponseEntity<?> eliminarTramite(@PathVariable int idTramite) {
         logger.info("Eliminando trámite ID: {}", idTramite);
@@ -325,6 +436,12 @@ public class SegurosController {
         }
     }
 
+    /**
+     * Obtiene estadísticas generales sobre los seguros de un usuario.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return mapa con métricas y estadísticas relacionadas con los seguros
+     */
     @GetMapping("/estadisticas/{idUsuario}")
     public ResponseEntity<?> obtenerEstadisticas(@PathVariable int idUsuario) {
         logger.info("Solicitud de estadísticas de seguros para usuario: {}", idUsuario);
@@ -337,7 +454,11 @@ public class SegurosController {
         }
     }
 
-    // Health check
+    /**
+     * Endpoint de verificación de estado del servicio.
+     *
+     * @return información del estado actual del servicio y su versión
+     */
     @GetMapping("/health")
     public ResponseEntity<?> healthCheck() {
         HashMap<String, Object> health = new HashMap<>();

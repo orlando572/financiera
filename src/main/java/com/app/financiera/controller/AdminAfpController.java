@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Controlador REST para la gestión administrativa de las AFPs.
+ * Proporciona endpoints para listar, crear, actualizar, eliminar y obtener estadísticas
+ * relacionadas con las AFPs registradas en el sistema.
+ */
 @RestController
 @RequestMapping("/api/admin/afps")
 @CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
@@ -22,6 +27,14 @@ public class AdminAfpController {
     @Autowired
     private AfpService afpService;
 
+    /**
+     * Obtiene la lista de AFPs según los criterios de búsqueda opcionales.
+     * Si no se especifica ningún parámetro, devuelve todas las AFPs registradas.
+     *
+     * @param busqueda texto opcional para filtrar AFPs por nombre
+     * @param estado estado opcional para filtrar AFPs (por ejemplo, Activo o Inactivo)
+     * @return una respuesta HTTP con la lista de AFPs o un mensaje de error en caso de fallo
+     */
     @GetMapping
     public ResponseEntity<?> listarAfps(
             @RequestParam(required = false) String busqueda,
@@ -45,6 +58,13 @@ public class AdminAfpController {
         }
     }
 
+
+    /**
+     * Recupera una AFP específica a partir de su identificador único.
+     *
+     * @param id identificador numérico de la AFP a consultar
+     * @return una respuesta HTTP con los datos de la AFP o un mensaje de error si no se encuentra
+     */
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerAfpPorId(@PathVariable int id) {
         try {
@@ -62,6 +82,11 @@ public class AdminAfpController {
         }
     }
 
+    /**
+     * Obtiene estadísticas generales relacionadas con las AFPs registradas.
+     *
+     * @return una respuesta HTTP con un mapa de estadísticas o un mensaje de error si ocurre una excepción
+     */
     @GetMapping("/estadisticas")
     public ResponseEntity<?> obtenerEstadisticas() {
         try {
@@ -73,6 +98,12 @@ public class AdminAfpController {
         }
     }
 
+    /**
+     * Registra una nueva AFP en el sistema, validando que no exista otra con el mismo código SBS.
+     *
+     * @param afp objeto AFP con los datos a registrar
+     * @return una respuesta HTTP con el resultado de la operación y la AFP creada en caso de éxito
+     */
     @PostMapping
     public ResponseEntity<?> crearAfp(@RequestBody Afp afp) {
         HashMap<String, Object> respuesta = new HashMap<>();
@@ -99,6 +130,13 @@ public class AdminAfpController {
         }
     }
 
+    /**
+     * Actualiza los datos de una AFP existente en base a su identificador.
+     *
+     * @param id identificador de la AFP que se desea actualizar
+     * @param afp objeto AFP con los nuevos valores
+     * @return una respuesta HTTP con el resultado de la actualización o un mensaje de error si no se encuentra
+     */
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizarAfp(
             @PathVariable int id,
@@ -128,6 +166,12 @@ public class AdminAfpController {
         }
     }
 
+    /**
+     * Marca una AFP como inactiva, simulando su eliminación lógica del sistema.
+     *
+     * @param id identificador de la AFP a eliminar
+     * @return una respuesta HTTP con el resultado de la operación o un mensaje de error si no se encuentra la AFP
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarAfp(@PathVariable int id) {
         HashMap<String, Object> respuesta = new HashMap<>();
@@ -153,6 +197,13 @@ public class AdminAfpController {
         }
     }
 
+    /**
+     * Cambia el estado actual de una AFP.
+     *
+     * @param id identificador de la AFP a modificar
+     * @param body mapa con la clave "estado" que contiene el nuevo valor a establecer
+     * @return una respuesta HTTP con el resultado de la operación y la AFP actualizada
+     */
     @PatchMapping("/{id}/estado")
     public ResponseEntity<?> cambiarEstado(
             @PathVariable int id,

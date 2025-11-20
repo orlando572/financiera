@@ -4,9 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.time.LocalDate;
 
+/**
+ * Entidad que representa el saldo de pensión de un usuario dentro del sistema financiero.
+ * Contiene información sobre los saldos totales, disponibles y desglosados por tipo de fondo,
+ * rentabilidad acumulada, fechas de corte y actualización, así como el estado del registro.
+ */
 @Getter
 @Setter
 @Entity

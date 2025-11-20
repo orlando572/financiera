@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Controlador REST para la gestión del perfil de usuario.
+ * Proporciona endpoints para obtener y actualizar el perfil, actualizar la foto de perfil
+ * y validar campos únicos como DNI y correo.
+ */
 @RestController
 @RequestMapping("/api/perfil")
 @CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
@@ -23,6 +28,12 @@ public class PerfilController {
     @Autowired
     private PerfilService perfilService;
 
+    /**
+     * Obtiene el perfil de un usuario según su ID.
+     *
+     * @param idUsuario ID del usuario cuyo perfil se desea obtener.
+     * @return Perfil del usuario si existe, o un mensaje de error si ocurre una excepción.
+     */
     @GetMapping("/{idUsuario}")
     public ResponseEntity<?> obtenerPerfil(@PathVariable int idUsuario) {
         logger.info("Solicitud de perfil para usuario ID: {}", idUsuario);
@@ -38,6 +49,13 @@ public class PerfilController {
         }
     }
 
+    /**
+     * Actualiza la información del perfil de un usuario.
+     *
+     * @param idUsuario ID del usuario cuyo perfil se desea actualizar.
+     * @param perfilDTO Objeto que contiene los nuevos datos del perfil del usuario.
+     * @return Mensaje de éxito con el perfil actualizado, o mensaje de error si falla la actualización.
+     */
     @PutMapping("/{idUsuario}")
     public ResponseEntity<?> actualizarPerfil(
             @PathVariable int idUsuario,
@@ -68,6 +86,13 @@ public class PerfilController {
         }
     }
 
+    /**
+     * Actualiza la foto de perfil de un usuario.
+     *
+     * @param idUsuario ID del usuario cuya foto de perfil se desea actualizar.
+     * @param body Mapa que contiene la nueva foto de perfil codificada.
+     * @return Mensaje de éxito con la nueva foto de perfil, o mensaje de error en caso de fallo.
+     */
     @PatchMapping("/{idUsuario}/foto")
     public ResponseEntity<?> actualizarFotoPerfil(
             @PathVariable int idUsuario,
@@ -100,6 +125,13 @@ public class PerfilController {
         }
     }
 
+    /**
+     * Valida si un DNI es único y no está registrado por otro usuario.
+     *
+     * @param dni DNI a validar.
+     * @param idUsuarioActual ID del usuario actual para excluir su propio DNI de la validación.
+     * @return Resultado indicando si el DNI está disponible o ya registrado.
+     */
     @GetMapping("/validar-dni")
     public ResponseEntity<?> validarDni(
             @RequestParam String dni,
@@ -117,6 +149,12 @@ public class PerfilController {
         }
     }
 
+    /**
+     * Valida si un correo electrónico es único y no está registrado por otro usuario.
+     * @param correo Correo electrónico a validar.
+     * @param idUsuarioActual ID del usuario actual para excluir su propio correo de la validación.
+     * @return Resultado indicando si el correo está disponible o ya registrado.
+     */
     @GetMapping("/validar-correo")
     public ResponseEntity<?> validarCorreo(
             @RequestParam String correo,

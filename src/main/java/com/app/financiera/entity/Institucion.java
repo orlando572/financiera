@@ -4,6 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Entidad que representa a una institución financiera o afiliada dentro del sistema.
+ * Contiene información básica de la institución, como nombre, tipo, RUC, dirección,
+ * contacto y estado de actividad.
+ */
 @Getter
 @Setter
 @Entity

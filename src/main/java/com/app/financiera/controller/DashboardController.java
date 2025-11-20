@@ -7,9 +7,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 
+/**
+ * Controlador REST que gestiona la información del panel de control (dashboard)
+ * del usuario. Permite obtener datos de resumen, perfil, alertas, actividad reciente
+ * y estadísticas financieras.
+ */
 @RestController
 @RequestMapping("/api/dashboard")
 @CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
@@ -20,6 +24,12 @@ public class DashboardController {
     @Autowired
     private DashboardService dashboardService;
 
+    /**
+     * Obtiene un resumen general del dashboard para un usuario específico.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return una respuesta HTTP con el resumen del dashboard o un mensaje de error en caso de fallo
+     */
     @GetMapping("/resumen/{idUsuario}")
     public ResponseEntity<?> obtenerResumenDashboard(@PathVariable int idUsuario) {
         logger.info("Solicitud de resumen de dashboard para usuario: {}", idUsuario);
@@ -35,6 +45,12 @@ public class DashboardController {
         }
     }
 
+    /**
+     * Obtiene la información del perfil del usuario para mostrar en el dashboard.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return una respuesta HTTP con los datos del perfil o un mensaje de error en caso de fallo
+     */
     @GetMapping("/perfil/{idUsuario}")
     public ResponseEntity<?> obtenerPerfilUsuario(@PathVariable int idUsuario) {
         logger.info("Solicitud de perfil para dashboard, usuario: {}", idUsuario);
@@ -47,6 +63,12 @@ public class DashboardController {
         }
     }
 
+    /**
+     * Obtiene las alertas actuales del usuario en el dashboard.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return una respuesta HTTP con la lista de alertas o un mensaje de error en caso de fallo
+     */
     @GetMapping("/alertas/{idUsuario}")
     public ResponseEntity<?> obtenerAlertas(@PathVariable int idUsuario) {
         logger.info("Solicitud de alertas para usuario: {}", idUsuario);
@@ -59,6 +81,13 @@ public class DashboardController {
         }
     }
 
+    /**
+     * Obtiene la actividad reciente del usuario en el sistema.
+     *
+     * @param idUsuario identificador único del usuario
+     * @param limite cantidad máxima de registros de actividad a retornar (por defecto 5)
+     * @return una respuesta HTTP con la actividad reciente o un mensaje de error en caso de fallo
+     */
     @GetMapping("/actividad/{idUsuario}")
     public ResponseEntity<?> obtenerActividadReciente(
             @PathVariable int idUsuario,
@@ -73,6 +102,12 @@ public class DashboardController {
         }
     }
 
+    /**
+     * Obtiene las estadísticas financieras asociadas al usuario.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return una respuesta HTTP con las estadísticas financieras o un mensaje de error en caso de fallo
+     */
     @GetMapping("/estadisticas/{idUsuario}")
     public ResponseEntity<?> obtenerEstadisticasFinancieras(@PathVariable int idUsuario) {
         logger.info("Solicitud de estadísticas financieras para usuario: {}", idUsuario);
@@ -85,6 +120,11 @@ public class DashboardController {
         }
     }
 
+    /**
+     * Verifica el estado de salud del servicio de dashboard.
+     *
+     * @return una respuesta HTTP con la información del estado y versión del servicio
+     */
     @GetMapping("/health")
     public ResponseEntity<?> healthCheck() {
         HashMap<String, Object> health = new HashMap<>();

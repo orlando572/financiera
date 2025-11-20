@@ -9,6 +9,11 @@ import org.hibernate.type.SqlTypes;
 
 import java.util.List;
 
+/**
+ * Entidad que representa una AFP (Administradora de Fondos de Pensiones).
+ * Contiene la información de identificación, comisiones, rentabilidad
+ * y los fondos disponibles gestionados por la institución.
+ */
 @Getter
 @Setter
 @Entity

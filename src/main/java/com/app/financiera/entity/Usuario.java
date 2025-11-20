@@ -6,9 +6,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import java.util.Date;
 
+/**
+ * Entidad que representa a un usuario dentro del sistema financiero.
+ * Contiene información personal, laboral y de contacto, así como datos relacionados
+ * con su rol, afiliación a AFP, preferencias de notificación y foto de perfil.
+ */
 @Getter
 @Setter
 @Entity

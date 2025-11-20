@@ -5,6 +5,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Entidad que representa a un asesor financiero dentro del sistema.
+ * Contiene información sobre su usuario asociado, especialidad,
+ * nivel de calificación, certificaciones, disponibilidad y canales de atención.
+ */
 @Getter
 @Setter
 @Entity

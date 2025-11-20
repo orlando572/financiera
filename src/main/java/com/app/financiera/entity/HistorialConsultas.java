@@ -7,6 +7,11 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entidad que representa el historial de consultas realizadas por un usuario dentro del sistema financiero.
+ * Registra la fecha de la consulta, el tipo de consulta, el detalle de la misma,
+ * el resultado obtenido y cualquier información adicional relevante.
+ */
 @Getter
 @Setter
 @Entity

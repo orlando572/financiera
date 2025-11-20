@@ -18,6 +18,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controlador REST que gestiona la información financiera del usuario,
+ * incluyendo aportes, saldos, fondos, estadísticas y comparativos.
+ */
 @RestController
 @RequestMapping("/api/financiero")
 @CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
@@ -37,6 +41,12 @@ public class FinancieroController {
     @Autowired
     private TipoFondoService tipoFondoService;
 
+    /**
+     * Obtiene un resumen financiero general del usuario.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return resumen financiero con datos consolidados o mensaje de error en caso de fallo
+     */
     @GetMapping("/resumen/{idUsuario}")
     public ResponseEntity<?> obtenerResumenFinanciero(@PathVariable int idUsuario) {
         logger.info("Solicitud de resumen financiero para usuario ID: {}", idUsuario);
@@ -50,7 +60,12 @@ public class FinancieroController {
         }
     }
 
-    // Aportes
+    /**
+     * Obtiene un resumen financiero general del usuario.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return resumen financiero con datos consolidados o mensaje de error en caso de fallo
+     */
     @GetMapping("/aportes/{idUsuario}")
     public ResponseEntity<?> obtenerAportesUsuario(@PathVariable int idUsuario) {
         logger.info("Solicitud de aportes para usuario ID: {}", idUsuario);
@@ -64,6 +79,13 @@ public class FinancieroController {
         }
     }
 
+    /**
+     * Obtiene los aportes del usuario correspondientes a un año específico.
+     *
+     * @param idUsuario identificador único del usuario
+     * @param year año del que se desean obtener los aportes
+     * @return lista de aportes del año solicitado o mensaje de error en caso de fallo
+     */
     @GetMapping("/aportes/{idUsuario}/{year}")
     public ResponseEntity<?> obtenerAportesYear(@PathVariable int idUsuario, @PathVariable int year) {
         logger.info("Solicitud de aportes del año {} para usuario ID: {}", year, idUsuario);
@@ -76,6 +98,13 @@ public class FinancieroController {
         }
     }
 
+    /**
+     * Obtiene los aportes del usuario filtrados por sistema de pensión.
+     *
+     * @param idUsuario identificador único del usuario
+     * @param sistema nombre del sistema de pensión (por ejemplo, AFP o ONP)
+     * @return lista de aportes filtrados por sistema o mensaje de error en caso de fallo
+     */
     @GetMapping("/aportes/{idUsuario}/sistema/{sistema}")
     public ResponseEntity<?> obtenerAportesPorSistema(@PathVariable int idUsuario, @PathVariable String sistema) {
         logger.info("Solicitud de aportes del sistema {} para usuario ID: {}", sistema, idUsuario);
@@ -88,6 +117,12 @@ public class FinancieroController {
         }
     }
 
+    /**
+     * Registra un nuevo aporte de pensión para el usuario.
+     *
+     * @param aporte objeto con los datos del aporte a registrar
+     * @return mensaje de confirmación y datos del aporte registrado, o mensaje de error
+     */
     @PostMapping("/aportes")
     public ResponseEntity<?> crearAporte(@RequestBody AportePension aporte) {
         logger.info("Solicitud para crear aporte para usuario ID: {}", aporte.getUsuario().getIdUsuario());
@@ -100,7 +135,12 @@ public class FinancieroController {
         }
     }
 
-    // Saldos
+    /**
+     * Obtiene todos los saldos de pensión registrados para el usuario.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return lista de saldos disponibles o mensaje de error en caso de fallo
+     */
     @GetMapping("/saldos/{idUsuario}")
     public ResponseEntity<?> obtenerSaldosUsuario(@PathVariable int idUsuario) {
         logger.info("Solicitud de saldos para usuario ID: {}", idUsuario);
@@ -114,6 +154,12 @@ public class FinancieroController {
         }
     }
 
+    /**
+     * Obtiene el saldo total y el saldo disponible del usuario.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return mapa con los montos totales y disponibles o mensaje de error
+     */
     @GetMapping("/saldos/{idUsuario}/total")
     public ResponseEntity<?> obtenerSaldoTotal(@PathVariable int idUsuario) {
         logger.info("Solicitud de saldo total para usuario ID: {}", idUsuario);
@@ -126,6 +172,13 @@ public class FinancieroController {
         }
     }
 
+    /**
+     * Obtiene las estadísticas financieras detalladas del usuario,
+     * incluyendo distribución y rendimiento de fondos.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return estadísticas financieras o mensaje de error en caso de fallo
+     */
     @GetMapping("/estadisticas/{idUsuario}")
     public ResponseEntity<?> obtenerEstadisticas(@PathVariable int idUsuario) {
         logger.info("Solicitud de estadísticas para usuario ID: {}", idUsuario);
@@ -139,6 +192,11 @@ public class FinancieroController {
         }
     }
 
+    /**
+     * Obtiene la lista de fondos activos disponibles para aportes.
+     *
+     * @return lista de fondos activos o mensaje de error en caso de fallo
+     */
     @GetMapping("/fondos")
     public ResponseEntity<?> obtenerFondosActivos() {
         logger.info("Solicitud de fondos activos");
@@ -151,7 +209,13 @@ public class FinancieroController {
         }
     }
 
-    // Analisis comparativo
+    /**
+     * Obtiene un análisis comparativo entre los distintos sistemas de pensión
+     * asociados al usuario.
+     *
+     * @param idUsuario identificador único del usuario
+     * @return datos comparativos entre sistemas de pensión o mensaje de error
+     */
     @GetMapping("/comparativo/{idUsuario}")
     public ResponseEntity<?> obtenerComparativo(@PathVariable int idUsuario) {
         logger.info("Solicitud de comparativo financiero para usuario ID: {}", idUsuario);

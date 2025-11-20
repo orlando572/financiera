@@ -13,6 +13,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controlador REST para la administración de usuarios.
+ * Permite listar, crear, actualizar, eliminar y cambiar el estado de los usuarios del sistema.
+ * También proporciona estadísticas generales de los registros de usuarios.
+ */
 @RestController
 @RequestMapping("/api/admin/usuarios")
 @CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
@@ -23,6 +28,15 @@ public class AdminUsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    /**
+     * Obtiene la lista de usuarios registrados en el sistema.
+     * Permite filtrar por nombre, DNI o estado según los parámetros opcionales.
+     * Si no se proporcionan filtros, devuelve todos los usuarios.
+     *
+     * @param busqueda texto opcional para buscar usuarios por nombre o DNI
+     * @param estado estado opcional para filtrar usuarios (por ejemplo, Activo o Inactivo)
+     * @return una respuesta HTTP con la lista de usuarios o un mensaje de error en caso de fallo
+     */
     @GetMapping
     public ResponseEntity<?> listarUsuarios(
             @RequestParam(required = false) String busqueda,
@@ -46,6 +60,12 @@ public class AdminUsuarioController {
         }
     }
 
+    /**
+     * Recupera los datos de un usuario específico a partir de su identificador único.
+     *
+     * @param id identificador numérico del usuario a consultar
+     * @return una respuesta HTTP con los datos del usuario o un mensaje de error si no se encuentra
+     */
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerUsuarioPorId(@PathVariable int id) {
         try {
@@ -63,6 +83,12 @@ public class AdminUsuarioController {
         }
     }
 
+    /**
+     * Obtiene estadísticas generales de los usuarios registrados.
+     * Las estadísticas pueden incluir métricas como cantidad total de usuarios o distribución por estado.
+     *
+     * @return una respuesta HTTP con los datos estadísticos o un mensaje de error en caso de fallo
+     */
     @GetMapping("/estadisticas")
     public ResponseEntity<?> obtenerEstadisticas() {
         try {
@@ -74,6 +100,13 @@ public class AdminUsuarioController {
         }
     }
 
+    /**
+     * Registra un nuevo usuario en el sistema con la información proporcionada.
+     *
+     * @param usuario objeto {@link Usuario} con los datos del nuevo usuario
+     * @return una respuesta HTTP con el mensaje de éxito y los datos del usuario creado,
+     *         o un mensaje de error si ocurre una excepción
+     */
     @PostMapping
     public ResponseEntity<?> crearUsuario(@RequestBody Usuario usuario) {
         try {
@@ -89,6 +122,13 @@ public class AdminUsuarioController {
         }
     }
 
+    /**
+     * Actualiza la información de un usuario existente identificado por su ID.
+     *
+     * @param id identificador del usuario a actualizar
+     * @param usuario objeto {@link Usuario} con los nuevos valores a registrar
+     * @return una respuesta HTTP con el usuario actualizado o un mensaje de error en caso de fallo
+     */
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizarUsuario(@PathVariable int id, @RequestBody Usuario usuario) {
         try {
@@ -102,6 +142,12 @@ public class AdminUsuarioController {
         }
     }
 
+    /**
+     * Elimina lógicamente un usuario del sistema, cambiando su estado a "Inactivo".
+     *
+     * @param id identificador del usuario a eliminar
+     * @return una respuesta HTTP con un mensaje de confirmación o un error si el usuario no se encuentra
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarUsuario(@PathVariable int id) {
         try {
@@ -120,6 +166,13 @@ public class AdminUsuarioController {
         }
     }
 
+    /**
+     * Cambia el estado de un usuario (por ejemplo, de Activo a Inactivo).
+     *
+     * @param id identificador del usuario cuyo estado se desea modificar
+     * @param body cuerpo del request que contiene el nuevo estado
+     * @return una respuesta HTTP con el usuario actualizado o un mensaje de error si ocurre un fallo
+     */
     @PatchMapping("/{id}/estado")
     public ResponseEntity<?> cambiarEstado(@PathVariable int id, @RequestBody HashMap<String, String> body) {
         try {

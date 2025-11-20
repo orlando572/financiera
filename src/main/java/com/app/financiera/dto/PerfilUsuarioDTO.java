@@ -5,6 +5,10 @@ import lombok.Setter;
 
 import java.util.Date;
 
+/**
+ * DTO que representa el perfil completo de un usuario en el sistema financiero.
+ * Incluye información personal, laboral, de contacto, pensiones y preferencias de comunicación.
+ */
 @Getter
 @Setter
 public class PerfilUsuarioDTO {

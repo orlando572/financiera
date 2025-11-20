@@ -7,6 +7,11 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entidad que representa una consulta de aportes de un usuario dentro del sistema financiero.
+ * Contiene información sobre el tipo de consulta realizada, los parámetros enviados,
+ * el resultado obtenido, y metadatos como la fecha, el estado de éxito y la IP de acceso.
+ */
 @Getter
 @Setter
 @Entity

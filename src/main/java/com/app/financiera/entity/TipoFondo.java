@@ -4,6 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Entidad que representa un tipo de fondo de pensiones o inversión.
+ * Contiene información sobre el nombre del fondo, descripción, categoría,
+ * rentabilidad esperada y estado del fondo dentro del sistema financiero.
+ */
 @Getter
 @Setter
 @Entity

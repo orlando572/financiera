@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controlador REST para la gestión y consulta de catálogos del sistema.
+ * Proporciona endpoints públicos para obtener tipos de seguros, categorías y compañías aseguradoras activas.
+ */
 @RestController
 @RequestMapping("/api/catalogos")
 @CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
@@ -22,6 +26,11 @@ public class CatalogosController {
     @Autowired
     private CatalogosService catalogosService;
 
+    /**
+     * Obtiene la lista de tipos de seguro activos registrados en el sistema.
+     *
+     * @return una respuesta HTTP con la lista de tipos de seguro activos o un mensaje de error en caso de fallo
+     */
     @GetMapping("/tipos-seguro")
     public ResponseEntity<?> obtenerTiposSeguros() {
         logger.info("Solicitud de tipos de seguro");
@@ -34,6 +43,13 @@ public class CatalogosController {
         }
     }
 
+    /**
+     * Obtiene los tipos de seguro filtrados por una categoría específica.
+     *
+     * @param categoria nombre de la categoría por la cual se desea filtrar los tipos de seguro
+     * @return una respuesta HTTP con la lista de tipos de seguro que pertenecen a la categoría indicada,
+     *         o un mensaje de error si ocurre una excepción
+     */
     @GetMapping("/tipos-seguro/categoria/{categoria}")
     public ResponseEntity<?> obtenerTiposPorCategoria(@PathVariable String categoria) {
         logger.info("Solicitud de tipos de seguro por categoría: {}", categoria);
@@ -46,6 +62,11 @@ public class CatalogosController {
         }
     }
 
+    /**
+     * Obtiene la lista de todas las categorías de seguros disponibles en el sistema.
+     *
+     * @return una respuesta HTTP con la lista de categorías o un mensaje de error si ocurre un fallo
+     */
     @GetMapping("/categorias")
     public ResponseEntity<?> obtenerCategorias() {
         logger.info("Solicitud de categorías de seguros");
@@ -58,6 +79,11 @@ public class CatalogosController {
         }
     }
 
+    /**
+     * Obtiene la lista de compañías de seguros activas registradas en el sistema.
+     *
+     * @return ResponseEntity con la lista de compañías activas o un mensaje de error si ocurre una excepción
+     */
     @GetMapping("/companias")
     public ResponseEntity<?> obtenerCompanias() {
         logger.info("Solicitud de compañías de seguros");
@@ -70,6 +96,13 @@ public class CatalogosController {
         }
     }
 
+    /**
+     * Busca compañías de seguros por nombre.
+     * La búsqueda se realiza con el parámetro 'nombre' enviado como query string.
+     *
+     * @param nombre texto que se utilizará para buscar coincidencias en el nombre de las compañías
+     * @return ResponseEntity con las compañías encontradas o un mensaje de error en caso de fallo
+     */
     @GetMapping("/companias/buscar")
     public ResponseEntity<?> buscarCompanias(@RequestParam String nombre) {
         logger.info("Búsqueda de compañías: {}", nombre);
@@ -82,6 +115,12 @@ public class CatalogosController {
         }
     }
 
+    /**
+     * Verifica el estado del servicio de catálogos.
+     * Se utiliza como endpoint de comprobación de salud del API.
+     *
+     * @return ResponseEntity con un texto indicando que el servicio está activo
+     */
     @GetMapping("/health")
     public ResponseEntity<?> healthCheck() {
         return ResponseEntity.ok("Catálogos API OK");

@@ -15,6 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controlador REST para la gestión y comparación de seguros.
+ * Permite obtener categorías, tipos, compañías, planes y estadísticas,
+ * además de ofrecer filtrado y comparación de diferentes seguros.
+ */
 @RestController
 @RequestMapping("/api/comparador")
 @CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
@@ -25,7 +30,11 @@ public class ComparadorController {
     @Autowired
     private ComparadorService comparadorService;
 
-    // Obtener todas las categorías de seguros
+    /**
+     * Obtiene todas las categorías de seguros disponibles.
+     *
+     * @return una respuesta HTTP con la lista de categorías o un mensaje de error si ocurre una excepción
+     */
     @GetMapping("/categorias")
     public ResponseEntity<?> obtenerCategorias() {
         logger.info("Solicitud de categorías de seguros");
@@ -38,7 +47,12 @@ public class ComparadorController {
         }
     }
 
-    // Obtener tipos de seguro por categoría
+    /**
+     * Obtiene los tipos de seguros pertenecientes a una categoría específica.
+     *
+     * @param categoria nombre de la categoría de seguros
+     * @return una respuesta HTTP con la lista de tipos de seguro o un mensaje de error en caso de fallo
+     */
     @GetMapping("/tipos/{categoria}")
     public ResponseEntity<?> obtenerTiposPorCategoria(@PathVariable String categoria) {
         logger.info("Solicitud de tipos de seguro para categoría: {}", categoria);
@@ -51,7 +65,11 @@ public class ComparadorController {
         }
     }
 
-    // Obtener todas las compañías
+    /**
+     * Obtiene la lista completa de compañías de seguros disponibles.
+     *
+     * @return una respuesta HTTP con la lista de compañías o un mensaje de error en caso de fallo
+     */
     @GetMapping("/companias")
     public ResponseEntity<?> obtenerCompanias() {
         logger.info("Solicitud de compañías de seguros");
@@ -64,7 +82,12 @@ public class ComparadorController {
         }
     }
 
-    // Obtener seguros por categoría
+    /**
+     * Obtiene los seguros asociados a una categoría específica.
+     *
+     * @param categoria nombre de la categoría
+     * @return una respuesta HTTP con la lista de seguros o un mensaje de error en caso de fallo
+     */
     @GetMapping("/seguros/categoria/{categoria}")
     public ResponseEntity<?> obtenerSegurosPorCategoria(@PathVariable String categoria) {
         logger.info("Solicitud de seguros por categoría: {}", categoria);
@@ -77,7 +100,12 @@ public class ComparadorController {
         }
     }
 
-    // Obtener seguros por tipo específico
+    /**
+     * Obtiene los seguros asociados a un tipo de seguro específico.
+     *
+     * @param idTipo identificador del tipo de seguro
+     * @return una respuesta HTTP con la lista de seguros o un mensaje de error en caso de fallo
+     */
     @GetMapping("/seguros/tipo/{idTipo}")
     public ResponseEntity<?> obtenerSegurosPorTipo(@PathVariable int idTipo) {
         logger.info("Solicitud de seguros por tipo: {}", idTipo);
@@ -90,7 +118,12 @@ public class ComparadorController {
         }
     }
 
-    // Obtener seguros por compañía
+    /**
+     * Obtiene los seguros ofrecidos por una compañía específica.
+     *
+     * @param idCompania identificador de la compañía de seguros
+     * @return una respuesta HTTP con la lista de seguros o un mensaje de error en caso de fallo
+     */
     @GetMapping("/seguros/compania/{idCompania}")
     public ResponseEntity<?> obtenerSegurosPorCompania(@PathVariable int idCompania) {
         logger.info("Solicitud de seguros por compañía: {}", idCompania);
@@ -103,7 +136,12 @@ public class ComparadorController {
         }
     }
 
-    // Comparar planes seleccionados
+    /**
+     * Compara los planes de seguros seleccionados por el usuario.
+     * Valida el número de planes y realiza una comparación detallada de sus atributos.
+     * @param request mapa con los identificadores de los planes a comparar
+     * @return una respuesta HTTP con el resultado de la comparación o un mensaje de error si ocurre una excepción
+     */
     @PostMapping("/comparar")
     public ResponseEntity<?> compararPlanes(@RequestBody Map<String, List<Integer>> request) {
         List<Integer> idsPlanes = request.get("idsPlanes");
@@ -129,7 +167,16 @@ public class ComparadorController {
         }
     }
 
-    // Filtrar seguros por criterios
+    /**
+     * Filtra los seguros según los criterios especificados como categoría, primas o coberturas.
+     *
+     * @param categoria categoría de seguro
+     * @param primaMin prima mínima (opcional)
+     * @param primaMax prima máxima (opcional)
+     * @param coberturaMin cobertura mínima (opcional)
+     * @param coberturaMax cobertura máxima (opcional)
+     * @return una respuesta HTTP con la lista de seguros filtrados o un mensaje de error si ocurre una excepción
+     */
     @GetMapping("/filtrar")
     public ResponseEntity<?> filtrarSeguros(
             @RequestParam String categoria,
@@ -150,6 +197,12 @@ public class ComparadorController {
         }
     }
 
+    /**
+     * Obtiene un resumen detallado del plan de seguro seleccionado.
+     *
+     * @param idSeguro identificador del seguro
+     * @return una respuesta HTTP con el resumen del plan o un mensaje de error en caso de fallo
+     */
     @GetMapping("/plan/{idSeguro}")
     public ResponseEntity<?> obtenerResumenPlan(@PathVariable int idSeguro) {
         logger.info("Solicitud de resumen de plan: {}", idSeguro);
@@ -167,6 +220,12 @@ public class ComparadorController {
         }
     }
 
+    /**
+     * Obtiene estadísticas generales relacionadas con una categoría de seguros.
+     *
+     * @param categoria nombre de la categoría de seguros
+     * @return una respuesta HTTP con los datos estadísticos o un mensaje de error si ocurre una excepción
+     */
     @GetMapping("/estadisticas/{categoria}")
     public ResponseEntity<?> obtenerEstadisticas(@PathVariable String categoria) {
         logger.info("Solicitud de estadísticas para categoría: {}", categoria);
@@ -179,6 +238,11 @@ public class ComparadorController {
         }
     }
 
+    /**
+     * Verifica el estado de salud del servicio del comparador.
+     *
+     * @return una respuesta HTTP con información del estado del servicio y versión actual
+     */
     @GetMapping("/health")
     public ResponseEntity<?> healthCheck() {
         HashMap<String, Object> health = new HashMap<>();

@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Controlador REST para la gestión de aportes de pensión.
+ * Proporciona endpoints para listar, registrar, actualizar, eliminar, cambiar estado
+ * y obtener estadísticas de los aportes registrados en el sistema.
+ */
 @RestController
 @RequestMapping("/api/admin/aportes")
 @CrossOrigin(origins = AppSettings.URL_CROSS_ORIGIN)
@@ -22,6 +27,15 @@ public class AdminAporteController {
     @Autowired
     private AportePensionService aportePensionService;
 
+    /**
+     * Lista los aportes de pensión según los filtros opcionales de usuario, estado y año.
+     * Si no se especifica ningún filtro, devuelve todos los aportes registrados.
+     *
+     * @param idUsuario identificador del usuario para filtrar aportes (opcional)
+     * @param estado estado del aporte (por ejemplo, Registrado, Procesado, Observado, Eliminado)
+     * @param year año del aporte a consultar (opcional)
+     * @return una respuesta HTTP con la lista de aportes o un mensaje de error si ocurre una excepción
+     */
     @GetMapping
     public ResponseEntity<?> listarAportes(
             @RequestParam(required = false) Integer idUsuario,
@@ -53,6 +67,12 @@ public class AdminAporteController {
         }
     }
 
+    /**
+     * Obtiene un aporte específico según su identificador único.
+     *
+     * @param id identificador del aporte a consultar
+     * @return una respuesta HTTP con los datos del aporte o un mensaje de error si no se encuentra
+     */
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerAportePorId(@PathVariable int id) {
         try {
@@ -73,6 +93,12 @@ public class AdminAporteController {
         }
     }
 
+    /**
+     * Obtiene estadísticas generales de los aportes registrados, incluyendo el total,
+     * la cantidad por estado y el monto total de aportes activos.
+     *
+     * @return una respuesta HTTP con un mapa de estadísticas o un mensaje de error en caso de fallo
+     */
     @GetMapping("/estadisticas")
     public ResponseEntity<?> obtenerEstadisticas() {
         try {
@@ -98,6 +124,13 @@ public class AdminAporteController {
         }
     }
 
+    /**
+     * Registra un nuevo aporte de pensión en el sistema.
+     * Si no se define un estado inicial, se asigna por defecto "Registrado".
+     *
+     * @param aporte objeto AportePension con los datos del nuevo aporte a registrar
+     * @return una respuesta HTTP con el aporte creado o un mensaje de error si ocurre una excepción
+     */
     @PostMapping
     public ResponseEntity<?> crearAporte(@RequestBody AportePension aporte) {
         HashMap<String, Object> respuesta = new HashMap<>();
@@ -121,6 +154,13 @@ public class AdminAporteController {
         }
     }
 
+    /**
+     * Actualiza los datos de un aporte existente identificado por su ID.
+     *
+     * @param id identificador del aporte a actualizar
+     * @param aporte objeto AportePension con los nuevos valores a establecer
+     * @return una respuesta HTTP con el aporte actualizado o un mensaje de error en caso de fallo
+     */
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizarAporte(
             @PathVariable int id,
@@ -144,6 +184,12 @@ public class AdminAporteController {
         }
     }
 
+    /**
+     * Elimina lógicamente un aporte de pensión mediante su identificador.
+     *
+     * @param id identificador del aporte a eliminar
+     * @return una respuesta HTTP con el resultado de la operación o un mensaje de error si ocurre una excepción
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarAporte(@PathVariable int id) {
         HashMap<String, Object> respuesta = new HashMap<>();
@@ -160,6 +206,14 @@ public class AdminAporteController {
         }
     }
 
+    /**
+     * Cambia el estado de un aporte de pensión existente.
+     * Solo se permiten los estados: "Registrado", "Procesado", "Observado" y "Eliminado".
+     *
+     * @param id identificador del aporte cuyo estado se desea modificar
+     * @param body mapa con la clave "estado" que contiene el nuevo valor a establecer
+     * @return una respuesta HTTP con el aporte actualizado o un mensaje de error si ocurre un fallo
+     */
     @PatchMapping("/{id}/estado")
     public ResponseEntity<?> cambiarEstado(
             @PathVariable int id,
@@ -201,6 +255,12 @@ public class AdminAporteController {
         }
     }
 
+    /**
+     * Obtiene todos los aportes registrados pertenecientes a un usuario específico.
+     *
+     * @param idUsuario identificador del usuario cuyos aportes se desean consultar
+     * @return una respuesta HTTP con la lista de aportes del usuario o un mensaje de error si ocurre una excepción
+     */
     @GetMapping("/usuario/{idUsuario}")
     public ResponseEntity<?> obtenerAportesPorUsuario(@PathVariable int idUsuario) {
         try {
