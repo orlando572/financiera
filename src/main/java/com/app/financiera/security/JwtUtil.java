@@ -15,7 +15,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    // Clave secreta para firmar el JWT (en producción debe estar en variables de entorno)
+    // Clave secreta para firmar el JWT
     private static final String SECRET_KEY = "sumaq_seguros_secret_key_2025_financiera_app_jwt_token_security";
 
     // Tiempo de expiración: 24 horas
