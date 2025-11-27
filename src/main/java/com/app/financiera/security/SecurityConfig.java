@@ -30,6 +30,8 @@ public class SecurityConfig {
                         // Endpoints públicos (sin autenticación)
                         .requestMatchers("/api/usuario/login", "/api/usuario/registrarUsuario",
                                 "/api/usuario/roles", "/api/usuario/afps").permitAll()
+
+                        .requestMatchers("/actuator/**").permitAll()
                         // Todos los demás endpoints requieren autenticación
                         .anyRequest().authenticated()
                 )
